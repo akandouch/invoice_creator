@@ -1,5 +1,7 @@
 package com.akandouch.invoicec.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +21,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	
 	public Invoice findOne(Long id) {
 		return this.invoiceRepo.findById(id).get();
+	}
+	
+	public List<Invoice> findAll(){
+		return this.invoiceRepo.findAll();
 	}
 }
