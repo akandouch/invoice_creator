@@ -43,7 +43,7 @@ public class InvoiceRestController {
 		items.add(test);items.add(test);items.add(test);items.add(test);items.add(test);items.add(test);
 		
 		i.setItems(items);*/
-		
+		invoice.getItems().forEach(x->System.out.println(x.getPeriod()));
 		return this.invoiceService.save(invoice);
 		
 	}

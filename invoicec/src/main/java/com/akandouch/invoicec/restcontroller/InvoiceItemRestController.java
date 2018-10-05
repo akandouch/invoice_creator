@@ -39,8 +39,9 @@ public class InvoiceItemRestController {
 	public Item save(@PathVariable Long id, @RequestBody Item item) {
 		System.out.println("-------- "  + id + " ---------");
 		Invoice invoice = this.invoiceService.findOne(id);
+		item.setAmount((double)item.getDays() * item.getRate());
 		invoice.getItems().add(item);
 		this.invoiceService.save(invoice);
-		return this.itemService.save(item);
+		return item;//this.itemService.save(item);
 	}
 }

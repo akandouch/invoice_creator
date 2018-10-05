@@ -9,7 +9,7 @@ public class Item {
 	
 	
 	private String project;
-    private String period;
+    private Period period;
     private String nature;
     private Float days;
     private Float rate;
@@ -44,10 +44,10 @@ public class Item {
 	public void setProject(String project) {
 		this.project = project;
 	}
-	public String getPeriod() {
+	public Period getPeriod() {
 		return period;
 	}
-	public void setPeriod(String period) {
+	public void setPeriod(Period period) {
 		this.period = period;
 	}
 	public String getNature() {
@@ -67,5 +67,34 @@ public class Item {
 	}
 	public void setRate(Float rate) {
 		this.rate = rate;
+	}
+	class Period{
+		Date from;
+		Date to;
+		
+		public Period() {}
+		
+		public Date getFrom() {return this.from;}
+		public Date getTo() {return this.to;}
+		
+		public void setFrom(Date from) {this.from = from;}
+		public void setTo(Date to) {this.to = to;}
+		
+
+		class Date{
+			int day;
+			int month;
+			int year;
+			
+			public Date(){}
+			
+			public int getDay() {return this.day;}
+			public int getMonth() {return this.month;}
+			public int getYear() { return this.year; }
+			
+			public void setDay(int day) { this.day = day;}
+			public void setMonth(int month) { this.month = month;}
+			public void setYear(int year) {this.year = year;}
+		}
 	}
 }
