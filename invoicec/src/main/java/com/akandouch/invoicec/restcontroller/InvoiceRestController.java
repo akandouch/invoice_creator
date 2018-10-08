@@ -32,20 +32,7 @@ public class InvoiceRestController {
 	
 	@PostMapping(produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public Invoice saveInvoice(@RequestBody Invoice invoice) {
-		/*Invoice i = new Invoice();
-		i.setId(777L);
-		List<Item> items = new ArrayList<Item>();
-		Item test = new Item();
-		test.setDescription("just for test");
-		test.setAmount(25.75);
-		test.setUnit(8);
-		
-		items.add(test);items.add(test);items.add(test);items.add(test);items.add(test);items.add(test);
-		
-		i.setItems(items);*/
-		invoice.getItems().forEach(x->System.out.println(x.getPeriod()));
 		return this.invoiceService.save(invoice);
-		
 	}
 
 }
