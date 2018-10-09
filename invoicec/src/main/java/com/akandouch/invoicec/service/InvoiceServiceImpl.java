@@ -1,5 +1,7 @@
 package com.akandouch.invoicec.service;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return this.invoiceRepo.save(invoice);
 	}
 	
-	public Invoice findOne(Long id) {
+	public Invoice findOne(String id) {
 		return this.invoiceRepo.findById(id).get();
 	}
 	
 	public List<Invoice> findAll(){
 		return this.invoiceRepo.findAll();
+	}
+	
+	public void delete(String id) {
+		this.invoiceRepo.deleteById(id);
 	}
 }

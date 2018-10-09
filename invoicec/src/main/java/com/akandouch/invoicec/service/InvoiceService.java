@@ -7,6 +7,7 @@ import com.akandouch.invoicec.domain.Invoice;
 public interface InvoiceService {
 
 	Invoice save(Invoice invoice);
-	Invoice findOne(Long id);
+	Invoice findOne(String id);
 	List<Invoice> findAll();
+	void delete(String id);
 }

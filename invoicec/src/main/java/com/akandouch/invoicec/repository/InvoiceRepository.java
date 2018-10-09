@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.akandouch.invoicec.domain.Invoice;
 
 @Repository
-public interface InvoiceRepository extends MongoRepository<Invoice, Long>{
+public interface InvoiceRepository extends MongoRepository<Invoice, String>{
 	
 }

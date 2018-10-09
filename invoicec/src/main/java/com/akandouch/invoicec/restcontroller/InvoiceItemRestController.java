@@ -33,7 +33,7 @@ public class InvoiceItemRestController {
 	}
 	
 	@PostMapping
-	public Item save(@PathVariable Long id, @RequestBody Item item) {
+	public Item save(@PathVariable String id, @RequestBody Item item) {
 		System.out.println("-------- "  + id + " ---------");
 		Invoice invoice = this.invoiceService.findOne(id);
 		item.setAmount((double)item.getDays() * item.getRate());
