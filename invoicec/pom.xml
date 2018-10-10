@@ -61,4 +61,11 @@
 	<!-- PDF GENERATOR -->
     
   </dependencies>
+  <build>
+  	<resources>
+  		<resource>
+  			<directory>src/main/resources</directory>
+  		</resource>
+  	</resources>
+  </build>
 </project>

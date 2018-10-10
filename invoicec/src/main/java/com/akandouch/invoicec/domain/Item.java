@@ -81,7 +81,7 @@ public class Item {
 		public void setTo(Date to) {this.to = to;}
 		@Override
 		public String toString() {
-			return this.from.toString() + " - " + this.to.toString();
+			return this.from.toString() + " to " + this.to.toString();
 		}
 		
 
@@ -99,6 +99,10 @@ public class Item {
 			public void setDay(int day) { this.day = day;}
 			public void setMonth(int month) { this.month = month;}
 			public void setYear(int year) {this.year = year;}
+			@Override
+			public String toString() {
+				return this.day + "-" + this.month + "-" + this.year;
+			}
 		}
 	}
 }
