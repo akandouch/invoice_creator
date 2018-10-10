@@ -68,7 +68,7 @@ public class Item {
 	public void setRate(Float rate) {
 		this.rate = rate;
 	}
-	class Period{
+	public class Period{
 		Date from;
 		Date to;
 		
@@ -79,9 +79,13 @@ public class Item {
 		
 		public void setFrom(Date from) {this.from = from;}
 		public void setTo(Date to) {this.to = to;}
+		@Override
+		public String toString() {
+			return this.from.toString() + " - " + this.to.toString();
+		}
 		
 
-		class Date{
+		public class Date{
 			int day;
 			int month;
 			int year;
