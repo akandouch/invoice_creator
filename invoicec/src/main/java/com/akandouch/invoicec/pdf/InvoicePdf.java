@@ -131,7 +131,7 @@ public class InvoicePdf {
         cellh.setPhrase(new Phrase("Days",fonth));table.addCell(cellh);
         cellh.setPhrase(new Phrase("Rate",fonth));table.addCell(cellh);
 		cellh.setPhrase(new Phrase("Amount",fonth));table.addCell(cellh);
-
+		total = 0;
 		items.forEach(i->{
 			cell.setHorizontalAlignment(PdfPCell.LEFT);
 			cell.setPhrase(new Phrase(i.getProject(),font));
