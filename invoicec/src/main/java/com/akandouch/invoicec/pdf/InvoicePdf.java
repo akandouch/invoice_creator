@@ -133,6 +133,7 @@ public class InvoicePdf {
 		cellh.setPhrase(new Phrase("Amount",fonth));table.addCell(cellh);
 
 		items.forEach(i->{
+			cell.setHorizontalAlignment(PdfPCell.LEFT);
 			cell.setPhrase(new Phrase(i.getProject(),font));
 			table.addCell(cell);
 			
@@ -146,9 +147,12 @@ public class InvoicePdf {
 			table.addCell(cell);
 			
 			cell.setPhrase(new Phrase("" + i.getRate(),font));
+			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			table.addCell(cell);
+
 			total += Float.valueOf(i.getRate()) * Float.valueOf(i.getDays());
 			cell.setPhrase(new Phrase("" + Float.valueOf(i.getRate()) * Float.valueOf(i.getDays()),font));
+			cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 			table.addCell(cell);
 		});
 
@@ -158,6 +162,7 @@ public class InvoicePdf {
 		noBorder.setPaddingTop(5);
 		noBorder.setPaddingBottom(10);
 		noBorder.setBorder(0);
+		cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
 		table.addCell(noBorder);
 		table.addCell(noBorder);
 		table.addCell(noBorder);
