@@ -1,5 +1,5 @@
 FROM maven
-WORKDIR /usr/src/app
+WORKDIR /tmp
 COPY . .
 RUN mvn package -DskipTests
 EXPOSE 8080
