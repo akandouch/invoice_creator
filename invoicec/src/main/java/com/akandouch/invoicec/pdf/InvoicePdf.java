@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.border.Border;
 
+import com.akandouch.invoicec.domain.InvoiceProfile;
 import org.apache.commons.io.IOUtils;
 
 import com.akandouch.invoicec.domain.Invoice;
@@ -31,6 +32,8 @@ public class InvoicePdf {
 	private static BaseFont KARLA_FONT_BOLD;
 	private static BaseFont KARLA_FONT_ITALIC;
 	private static BaseFont KARLA_FONT_BOLD_ITALIC;
+
+	private static double total = 0;
 	
 	static {
 		try {
@@ -49,8 +52,9 @@ public class InvoicePdf {
 			PdfWriter.getInstance(pdf, fos);
 			pdf.open();
 			pdf.add(new Paragraph("Invoice",new Font(KARLA_FONT_REGULAR)));
-			pdf.add(addInvoicer(invoice));
+			pdf.add(addInvoiceProfile(invoice.getInvoiced()));
 			pdf.add(addTable(invoice.getItems()));
+			pdf.add(addInvoiceProfile(invoice.getInvoicer()));
 			pdf.close();
 			
 		}catch( IOException ioe ) {
@@ -68,15 +72,30 @@ public class InvoicePdf {
 		tmp.delete();
 		return b;
 	}
-	private static Paragraph addInvoicer(Invoice invoice) {
-		Paragraph paragraph = new Paragraph("invoicer", new Font(KARLA_FONT_REGULAR));
-		paragraph.add("Zaide");
-		paragraph.add("Akandouch");
+	private static Paragraph addInvoiceProfile(InvoiceProfile invoiceProfile) {
+
+		String newLine = System.getProperty("line.separator");
+		Font f = new Font(KARLA_FONT_REGULAR);
+
+		f.setSize(10);
+		f.setColor(90,90,90);
+		Paragraph paragraph = new Paragraph("", f);
+
+		paragraph.setSpacingBefore(25);
+		paragraph.setSpacingAfter(25);
+
+		paragraph.add(new Phrase(invoiceProfile.getFirstname() + " " + invoiceProfile.getLastname().toUpperCase() + "\n", new Font(KARLA_FONT_BOLD)));
+
+		paragraph.add(invoiceProfile.getVat() + "\n" );
+
+		paragraph.add(invoiceProfile.getAddress().getStreet() + " " + invoiceProfile.getAddress().getStreetNumber() + newLine );
+		paragraph.add(invoiceProfile.getAddress().getCity() + ", " + invoiceProfile.getAddress().getPostcode() + " " + invoiceProfile.getAddress().getCountry());
+
 		return paragraph;
 	}
 	private static PdfPTable addTable(List<Item> items) throws DocumentException, IOException {
 		System.out.println(items.size());
-		PdfPTable table = new PdfPTable(5);
+		PdfPTable table = new PdfPTable(6);
 		PdfPCell cell = new PdfPCell();
 		PdfPCell cellh = new PdfPCell();
 		Font font = new Font(KARLA_FONT_REGULAR);
@@ -95,7 +114,7 @@ public class InvoicePdf {
 		cell.setBorderColor(new BaseColor(90, 90, 90));
 		cell.setPaddingLeft(10);
 		cell.setPaddingTop(5);
-		cell.setPaddingBottom(5);
+		cell.setPaddingBottom(10);
 		
 		cellh.setBorderColor(new BaseColor(90, 90, 90));
 		//cellh.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -104,14 +123,15 @@ public class InvoicePdf {
 		cellh.setPaddingTop(7);
 		
 		table.setWidthPercentage(100);
-        table.setWidths(new int[]{3, 3, 3, 3, 3});
+        table.setWidths(new int[]{3, 3, 3, 2, 2, 3});
         
         cellh.setPhrase(new Phrase("Project",fonth));table.addCell(cellh);
         cellh.setPhrase(new Phrase("Period",fonth));table.addCell(cellh);
         cellh.setPhrase(new Phrase("Natur",fonth));table.addCell(cellh);
         cellh.setPhrase(new Phrase("Days",fonth));table.addCell(cellh);
         cellh.setPhrase(new Phrase("Rate",fonth));table.addCell(cellh);
-        
+		cellh.setPhrase(new Phrase("Amount",fonth));table.addCell(cellh);
+
 		items.forEach(i->{
 			cell.setPhrase(new Phrase(i.getProject(),font));
 			table.addCell(cell);
@@ -127,7 +147,79 @@ public class InvoicePdf {
 			
 			cell.setPhrase(new Phrase("" + i.getRate(),font));
 			table.addCell(cell);
+			total += Float.valueOf(i.getRate()) * Float.valueOf(i.getDays());
+			cell.setPhrase(new Phrase("" + Float.valueOf(i.getRate()) * Float.valueOf(i.getDays()),font));
+			table.addCell(cell);
 		});
+
+		/*TOTAL*/
+		PdfPCell noBorder = new PdfPCell();
+		noBorder.setPaddingLeft(10);
+		noBorder.setPaddingTop(5);
+		noBorder.setPaddingBottom(10);
+		noBorder.setBorder(0);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+
+		noBorder.setPhrase(new Phrase("SUBTOTAL",font));
+		table.addCell(noBorder);
+		cell.setPhrase(new Phrase(""+total,font));
+		table.addCell(cell);
+
+
+		/*TAXABLE*/
+		noBorder.setPhrase(null);
+		noBorder.setBorder(0);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+
+		noBorder.setPhrase(new Phrase("Taxable",font));
+		table.addCell(noBorder);
+		cell.setPhrase(new Phrase(""+total,font));
+		table.addCell(cell);
+
+		/*VAT RATE*/
+		noBorder.setPhrase(null);
+		noBorder.setBorder(0);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+
+		noBorder.setPhrase(new Phrase("Vat rate",font));
+		table.addCell(noBorder);
+		cell.setPhrase(new Phrase(""+total,font));
+		table.addCell(cell);
+
+		/*VAT AMOUNT*/
+		noBorder.setPhrase(null);
+		noBorder.setBorder(0);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+
+		noBorder.setPhrase(new Phrase("Vat amount",font));
+		table.addCell(noBorder);
+		cell.setPhrase(new Phrase(""+total,font));
+		table.addCell(cell);
+
+		/*TOTAL*/
+		noBorder.setPhrase(null);
+		noBorder.setBorder(0);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+		table.addCell(noBorder);
+
+		noBorder.setPhrase(new Phrase("TOTAL",fonth));
+		table.addCell(noBorder);
+		cell.setPhrase(new Phrase(""+total,fonth));
+		table.addCell(cell);
 		
 		return table;
 	}
