@@ -3,7 +3,7 @@ package com.akandouch.invoicec.service;
 import com.akandouch.invoicec.domain.Invoice;
 import com.akandouch.invoicec.domain.InvoiceProfile;
 import com.akandouch.invoicec.repository.InvoiceRepository;
-import jdk.internal.joptsimple.internal.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .invoiced(Optional.ofNullable(invoiced).orElseGet(InvoiceProfile::new))
                 .invoicer(Optional.ofNullable(invoicer).orElseGet(InvoiceProfile::new))
                 .items(Optional.ofNullable(invoice.getItems()).orElseGet(Collections::emptyList))
-                .title(Strings.isNullOrEmpty(invoice.getTitle()) ? "No title" : invoice.getTitle())
+                .title(StringUtils.isEmpty(invoice.getTitle()) ? "No title" : invoice.getTitle())
                 .build();
 
         return this.invoiceRepo.save(copy);
