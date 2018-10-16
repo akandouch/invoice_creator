@@ -51,7 +51,7 @@ public class InvoicePdf {
 			Document pdf = new Document();
 			PdfWriter.getInstance(pdf, fos);
 			pdf.open();
-			pdf.add(new Paragraph("Invoice",new Font(KARLA_FONT_REGULAR)));
+			pdf.add(new Paragraph("Invoice",new Font(KARLA_FONT_BOLD_ITALIC)));
 			pdf.add(addInvoiceProfile(invoice.getInvoiced()));
 			pdf.add(addTable(invoice.getItems()));
 			pdf.add(addInvoiceProfile(invoice.getInvoicer()));
