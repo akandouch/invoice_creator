@@ -43,8 +43,8 @@ public class Fixture implements CommandLineRunner {
 
         LOGGER.info("create invoicer profile");
         InvoiceProfile invoicer = invoiceProfileRepository.save(
-                InvoiceProfile.newBuilder()
-                        .address(Address.newBuilder()
+                InvoiceProfile.builder()
+                        .address(Address.builder()
                                 .city("Tervuren")
                                 .country("Belgique")
                                 .postcode("3080")
@@ -60,8 +60,8 @@ public class Fixture implements CommandLineRunner {
         );
         LOGGER.info("create invoiced profile");
         InvoiceProfile invoiced = invoiceProfileRepository.save(
-                InvoiceProfile.newBuilder()
-                        .address(Address.newBuilder()
+                InvoiceProfile.builder()
+                        .address(Address.builder()
                                 .city("Las Vegas")
                                 .country("United states")
                                 .postcode("90000")
@@ -76,16 +76,16 @@ public class Fixture implements CommandLineRunner {
                         .build()
         );
         LOGGER.info("create item");
-        Item item = itemRepository.save(Item.newBuilder()
+        Item item = itemRepository.save(Item.builder()
                 .id(RandomUtils.nextLong())
                 .days(20f)
                 .amount(10000d)
                 .description("BNP Project")
                 .nature("Consulting")
                 .project("BNPPF-7282")
-                .period(Period.newBuilder()
-                        .from(DateDto.newBuilder().day(1).month(12).year(2019).build())
-                        .to(DateDto.newBuilder().day(31).month(12).year(2019).build())
+                .period(Period.builder()
+                        .from(DateDto.builder().day(1).month(12).year(2019).build())
+                        .to(DateDto.builder().day(31).month(12).year(2019).build())
                         .build()
                 )
                 .days(20f)
@@ -94,7 +94,7 @@ public class Fixture implements CommandLineRunner {
                 .build()
         );
         LOGGER.info("create invoice");
-        invoiceRepository.save(Invoice.newBuilder()
+        invoiceRepository.save(Invoice.builder()
                 .items(Arrays.asList(item))
                 .invoiced(invoiced)
                 .invoicer(invoicer)

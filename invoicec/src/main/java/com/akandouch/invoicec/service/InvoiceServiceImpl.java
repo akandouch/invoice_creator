@@ -21,7 +21,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceProfile invoiced = invoice.getInvoiced();
         InvoiceProfile invoicer = invoice.getInvoicer();
 
-        Invoice copy = Invoice.newBuilder(invoice)
+        Invoice copy = invoice.toBuilder()
                 .invoiced(Optional.ofNullable(invoiced).orElseGet(InvoiceProfile::new))
                 .invoicer(Optional.ofNullable(invoicer).orElseGet(InvoiceProfile::new))
                 .items(Optional.ofNullable(invoice.getItems()).orElseGet(Collections::emptyList))
