@@ -6,14 +6,43 @@ public class Item {
 	private String description;
 	private Integer unit;
 	private Double amount;
-	
-	
+
 	private String project;
     private Period period;
     private String nature;
     private Float days;
     private Float rate;
-    
+
+	private Item(Builder builder) {
+		setId(builder.id);
+		setDescription(builder.description);
+		setUnit(builder.unit);
+		setAmount(builder.amount);
+		setProject(builder.project);
+		setPeriod(builder.period);
+		setNature(builder.nature);
+		setDays(builder.days);
+		setRate(builder.rate);
+	}
+
+	public static Builder newBuilder() {
+		return new Builder();
+	}
+
+	public static Builder newBuilder(Item copy) {
+		Builder builder = new Builder();
+		builder.id = copy.getId();
+		builder.description = copy.getDescription();
+		builder.unit = copy.getUnit();
+		builder.amount = copy.getAmount();
+		builder.project = copy.getProject();
+		builder.period = copy.getPeriod();
+		builder.nature = copy.getNature();
+		builder.days = copy.getDays();
+		builder.rate = copy.getRate();
+		return builder;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -68,41 +97,71 @@ public class Item {
 	public void setRate(Float rate) {
 		this.rate = rate;
 	}
-	public class Period{
-		Date from;
-		Date to;
-		
-		public Period() {}
-		
-		public Date getFrom() {return this.from;}
-		public Date getTo() {return this.to;}
-		
-		public void setFrom(Date from) {this.from = from;}
-		public void setTo(Date to) {this.to = to;}
-		@Override
-		public String toString() {
-			return this.from.toString() + " to " + this.to.toString();
-		}
-		
 
-		public class Date{
-			int day;
-			int month;
-			int year;
-			
-			public Date(){}
-			
-			public int getDay() {return this.day;}
-			public int getMonth() {return this.month;}
-			public int getYear() { return this.year; }
-			
-			public void setDay(int day) { this.day = day;}
-			public void setMonth(int month) { this.month = month;}
-			public void setYear(int year) {this.year = year;}
-			@Override
-			public String toString() {
-				return this.day + "-" + this.month + "-" + this.year;
-			}
+	public Item(){}
+
+
+	public static final class Builder {
+		private Long id;
+		private String description;
+		private Integer unit;
+		private Double amount;
+		private String project;
+		private Period period;
+		private String nature;
+		private Float days;
+		private Float rate;
+
+		private Builder() {
+		}
+
+		public Builder id(Long val) {
+			id = val;
+			return this;
+		}
+
+		public Builder description(String val) {
+			description = val;
+			return this;
+		}
+
+		public Builder unit(Integer val) {
+			unit = val;
+			return this;
+		}
+
+		public Builder amount(Double val) {
+			amount = val;
+			return this;
+		}
+
+		public Builder project(String val) {
+			project = val;
+			return this;
+		}
+
+		public Builder period(Period val) {
+			period = val;
+			return this;
+		}
+
+		public Builder nature(String val) {
+			nature = val;
+			return this;
+		}
+
+		public Builder days(Float val) {
+			days = val;
+			return this;
+		}
+
+		public Builder rate(Float val) {
+			rate = val;
+			return this;
+		}
+
+		public Item build() {
+			return new Item(this);
 		}
 	}
 }
