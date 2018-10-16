@@ -43,9 +43,9 @@ public class InvoicePdf {
 		}
 	}
 	
-	public static byte[] generateInvoicePdf(Invoice invoice) {
+	public static byte[] generateInvoicePdf(Invoice invoice) throws IOException {
 		
-		File tmp = new File("C:\\workspace\\" + invoice.getTitle() + "_gen.pdf" );
+		File tmp = File.createTempFile(invoice.getTitle()+"_gen",".pdf");
 		byte[] b = new byte[1024];
 		try(FileOutputStream fos = new FileOutputStream(tmp)){
 			Document pdf = new Document();

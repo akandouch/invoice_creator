@@ -43,7 +43,13 @@
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-mongodb</artifactId>
    	</dependency>
-    
+
+    <!-- Apache commons -->
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+      </dependency>
+
     <!-- PDF GENERATOR -->
     <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 	<dependency>
