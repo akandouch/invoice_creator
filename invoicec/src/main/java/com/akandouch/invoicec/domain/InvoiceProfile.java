@@ -29,4 +29,6 @@ public class InvoiceProfile {
 	@Valid
 	private Address address;
 
+	private boolean customer;
+
 }
