@@ -5,26 +5,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.border.Border;
 
 import com.akandouch.invoicec.domain.InvoiceProfile;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import org.apache.commons.io.IOUtils;
 
 import com.akandouch.invoicec.domain.Invoice;
 import com.akandouch.invoicec.domain.Item;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfDiv.BorderTopStyle;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 public class InvoicePdf {
 	
@@ -52,6 +46,15 @@ public class InvoicePdf {
 			PdfWriter.getInstance(pdf, fos);
 			pdf.open();
 			pdf.add(new Paragraph("Invoice",new Font(KARLA_FONT_BOLD_ITALIC)));
+			
+			if(invoice.getInvoicer().getLogo() != null ) {
+				String logo = (String.valueOf(invoice.getInvoicer().getLogo()).split(","))[1];
+
+				System.out.println(logo);
+				Image m = Image.getInstance(Base64.getDecoder().decode(logo));
+				m.scaleAbsolute(100, 100);
+				pdf.add(m);
+			}
 			pdf.add(addInvoiceProfile(invoice.getInvoiced()));
 			pdf.add(addTable(invoice.getItems()));
 			pdf.add(addInvoiceProfile(invoice.getInvoicer()));

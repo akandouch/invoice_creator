@@ -34,4 +34,6 @@ public class InvoiceProfile {
 
 	private boolean customer;
 
+	private char[] logo;
+
 }
