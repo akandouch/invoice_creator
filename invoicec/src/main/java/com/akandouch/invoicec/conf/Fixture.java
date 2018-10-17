@@ -4,6 +4,7 @@ import com.akandouch.invoicec.domain.*;
 import com.akandouch.invoicec.repository.InvoiceProfileRepository;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Configuration
 @Profile("dev")
@@ -42,6 +49,14 @@ public class Fixture implements CommandLineRunner {
         LOGGER.info("dev mode, create fixture");
 
         LOGGER.info("create invoicer profile");
+
+        File f = new File(getClass().getClassLoader().getResource("img/logo_fixture.png").getFile());
+
+        byte[]b = Files.readAllBytes(Paths.get(f.getPath()));
+
+        String ext = FilenameUtils.getExtension(f.getPath());
+        String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);
+
         InvoiceProfile invoicer = invoiceProfileRepository.save(
                 InvoiceProfile.builder()
                         .address(Address.builder()
@@ -57,6 +72,7 @@ public class Fixture implements CommandLineRunner {
                         .firstname("Michael")
                         .lastname("Bay")
                         .vat("0123456789")
+                        .logo(logo.toCharArray())
                         .build()
         );
         LOGGER.info("create invoiced profile");

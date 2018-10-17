@@ -46,7 +46,7 @@ public class InvoicePdf {
 			PdfWriter.getInstance(pdf, fos);
 			pdf.open();
 			pdf.add(new Paragraph("Invoice",new Font(KARLA_FONT_BOLD_ITALIC)));
-			
+
 			if(invoice.getInvoicer().getLogo() != null ) {
 				String logo = (String.valueOf(invoice.getInvoicer().getLogo()).split(","))[1];
 
