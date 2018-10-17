@@ -54,7 +54,6 @@ public class Fixture implements CommandLineRunner {
 
         byte[]b = Files.readAllBytes(Paths.get(f.getPath()));
 
-        String ext = FilenameUtils.getExtension(f.getPath());
         String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);
 
         InvoiceProfile invoicer = invoiceProfileRepository.save(
