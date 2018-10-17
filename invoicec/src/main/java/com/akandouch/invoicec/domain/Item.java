@@ -19,10 +19,10 @@ public class Item {
 	private Long id;
 	@Size(min = 1, max = 1000)
 	private String description;
-	@NotNull
-	private Integer unit;
 	@Min(0)
-	private Double amount;
+	private int unit;
+	@Min(0)
+	private double amount;
 	@NotBlank
 	private String project;
 	@NotNull
