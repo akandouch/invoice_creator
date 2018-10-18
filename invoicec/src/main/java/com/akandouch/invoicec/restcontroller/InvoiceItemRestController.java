@@ -40,13 +40,12 @@ public class InvoiceItemRestController {
                 .amount((double) item.getDays() * item.getRate())
                 .id(item.getId() == null ? UUID.randomUUID().toString() : item.getId())
                 .build();
-        Item save = itemService.save(copyItem);
         List<Item> newListItems = invoice.getItems()
                 .stream()
-                .filter(i -> !i.getId().equals(item.getId()))
+                .filter(i -> !i.getId().equals(copyItem.getId()))
                 .collect(Collectors.toList());
 
-        newListItems.add(save);
+        newListItems.add(copyItem);
         this.invoiceService.save(invoice.toBuilder().items(newListItems).build());
         return item;
     }
