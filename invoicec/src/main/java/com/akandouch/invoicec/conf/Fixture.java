@@ -4,7 +4,6 @@ import com.akandouch.invoicec.domain.*;
 import com.akandouch.invoicec.repository.InvoiceProfileRepository;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -69,6 +66,8 @@ public class Fixture implements CommandLineRunner {
                         .active(Boolean.TRUE)
                         .accountNumber("BE 99 876 455 7478")
                         .firstname("Michael")
+                        .mail("john@doe.fr")
+                        .phoneNumber("0487/34.34.34")
                         .lastname("Bay")
                         .vat("0123456789")
                         .logo(logo.toCharArray())
@@ -87,6 +86,8 @@ public class Fixture implements CommandLineRunner {
                         )
                         .active(Boolean.FALSE)
                         .customer(true)
+                        .mail("foo@bar.fr")
+                        .phoneNumber("0498/13.12.14")
                         .accountNumber("BE 33 332 223 2223")
                         .firstname("BNP")
                         .lastname("Paribas")
