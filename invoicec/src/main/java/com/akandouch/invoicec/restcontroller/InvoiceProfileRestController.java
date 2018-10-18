@@ -21,7 +21,6 @@ public class InvoiceProfileRestController {
 
 	@GetMapping
 	public List<InvoiceProfile> get() {
-		System.out.println("rest controller : " + this.getClass().getName() + " : get all");
 		return invoiceProfileService.findAll();
 	}
 	

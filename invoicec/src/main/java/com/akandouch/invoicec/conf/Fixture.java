@@ -4,7 +4,7 @@ import com.akandouch.invoicec.domain.*;
 import com.akandouch.invoicec.repository.InvoiceProfileRepository;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
-import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +96,7 @@ public class Fixture implements CommandLineRunner {
         );
         LOGGER.info("create item");
         Item item = itemRepository.save(Item.builder()
-                .id(RandomUtils.nextLong())
+                .id(RandomStringUtils.randomAlphanumeric(12))
                 .days(20f)
                 .amount(10000d)
                 .description("BNP Project")

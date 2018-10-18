@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/invoice/{id}/item")
@@ -34,9 +36,18 @@ public class InvoiceItemRestController {
     public Item save(@Valid @RequestBody Item item, @PathVariable("id") String id) {
         System.out.println("-------- " + id + " ---------");
         Invoice invoice = this.invoiceService.findOne(id);
-        item.setAmount((double) item.getDays() * item.getRate());
-        invoice.getItems().add(item);
-        this.invoiceService.save(invoice);
+        Item copyItem = item.toBuilder()
+                .amount((double) item.getDays() * item.getRate())
+                .id(item.getId() == null ? UUID.randomUUID().toString() : item.getId())
+                .build();
+        Item save = itemService.save(copyItem);
+        List<Item> newListItems = invoice.getItems()
+                .stream()
+                .filter(i -> !i.getId().equals(item.getId()))
+                .collect(Collectors.toList());
+
+        newListItems.add(save);
+        this.invoiceService.save(invoice.toBuilder().items(newListItems).build());
         return item;
     }
 }

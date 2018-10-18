@@ -6,21 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class DateDto {
-    @NotBlank
-    @Size(min = 0, max = 7)
-    private int day;
-    @NotBlank
-    @Size(min = 0, max = 12)
-    private int month;
-    @NotBlank
-    @Size(min = 1970, max = 2100)
-    private int year;
+    @Min(1)
+    @Max(31)
+    private Integer day;
+    @Min(1)
+    @Max(12)
+    private Integer month;
+    @Min(1900)
+    @Max(2100)
+    private Integer year;
 }
