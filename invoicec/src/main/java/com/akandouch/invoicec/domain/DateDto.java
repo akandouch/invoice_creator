@@ -16,11 +16,11 @@ import javax.validation.constraints.Min;
 public class DateDto {
     @Min(1)
     @Max(31)
-    private Integer day;
+    private int day;
     @Min(1)
     @Max(12)
-    private Integer month;
+    private int month;
     @Min(1900)
     @Max(2100)
-    private Integer year;
+    private int year;
 }

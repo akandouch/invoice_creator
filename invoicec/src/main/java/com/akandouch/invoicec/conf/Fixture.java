@@ -110,6 +110,7 @@ public class Fixture implements CommandLineRunner {
                 .days(20f)
                 .rate(500f)
                 .unit(2)
+                .vatRate(1.21f)
                 .build()
         );
         LOGGER.info("create invoice");
