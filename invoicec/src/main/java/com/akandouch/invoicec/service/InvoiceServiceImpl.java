@@ -2,11 +2,13 @@ package com.akandouch.invoicec.service;
 
 import com.akandouch.invoicec.domain.Invoice;
 import com.akandouch.invoicec.domain.InvoiceProfile;
+import com.akandouch.invoicec.domain.Settings;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,19 +17,29 @@ import java.util.Optional;
 public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
+    private SettingsService settingsService;
+
+    @Autowired
     InvoiceRepository invoiceRepo;
 
     public Invoice save(Invoice invoice) {
         InvoiceProfile invoiced = invoice.getInvoiced();
         InvoiceProfile invoicer = invoice.getInvoicer();
 
-        Invoice copy = invoice.toBuilder()
+        Invoice.InvoiceBuilder invoiceBuilder = invoice.toBuilder()
                 .invoiced(Optional.ofNullable(invoiced).orElseGet(InvoiceProfile::new))
                 .invoicer(Optional.ofNullable(invoicer).orElseGet(InvoiceProfile::new))
                 .items(Optional.ofNullable(invoice.getItems()).orElseGet(Collections::emptyList))
-                .title(StringUtils.isEmpty(invoice.getTitle()) ? "No title" : invoice.getTitle())
-                .build();
+                .title(StringUtils.isEmpty(invoice.getTitle()) ? "No title" : invoice.getTitle());
 
+        if(StringUtils.isBlank(invoice.getInvoiceNumber())) {
+            Settings settings = settingsService.getSettings();
+            invoiceBuilder.invoiceNumber(Year.now().toString().concat("-") + settings.getCurrentInvoiceNumber());
+            settingsService.saveOrUpdateSettings(settings.toBuilder().currentInvoiceNumber(settings.getCurrentInvoiceNumber() + 1).build());
+        }
+
+        Invoice copy = invoiceBuilder
+                .build();
         return this.invoiceRepo.save(copy);
     }
 
@@ -37,6 +49,18 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public List<Invoice> findAll() {
         return this.invoiceRepo.findAll();
+    }
+
+    @Override
+    public Invoice createNewInvoice() {
+        return Invoice.builder()
+                .items(Collections.emptyList())
+                .invoiced(InvoiceProfile.builder().build())
+                .invoicer(InvoiceProfile.builder().build())
+                .invoiceNumber(Year.now().toString().concat("-") + settingsService.getSettings().getCurrentInvoiceNumber())
+                .status(0)
+                .title("No title yet")
+                .build();
     }
 
     public void delete(String id) {

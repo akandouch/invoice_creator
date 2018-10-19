@@ -15,5 +15,5 @@ public class Settings {
     private String id;
 
     @Min(1)
-    private int currentInvoiceNumber;
+    private int currentInvoiceNumber = 1;
 }

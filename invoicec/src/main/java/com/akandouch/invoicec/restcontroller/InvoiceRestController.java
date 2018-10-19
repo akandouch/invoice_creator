@@ -20,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class InvoiceRestController {
 
+
     @Autowired
     private InvoiceService invoiceService;
 
@@ -45,6 +46,10 @@ public class InvoiceRestController {
 
         ResponseEntity<byte[]> r = new ResponseEntity<>(f, HttpStatus.OK);
         return r;
+    }
+    @GetMapping(value = "create-new-invoice", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Invoice createNewInvoice() throws IOException {
+        return invoiceService.createNewInvoice();
     }
 
 }
