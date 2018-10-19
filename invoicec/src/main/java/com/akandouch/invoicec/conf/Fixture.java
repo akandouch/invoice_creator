@@ -122,6 +122,14 @@ public class Fixture implements CommandLineRunner {
                 .status(0)
                 .build()
         );
+        invoiceRepository.save(Invoice.builder()
+                .items(Arrays.asList(item))
+                .invoiced(invoiced)
+                .invoicer(invoicer)
+                .title("Facture #2")
+                .status(2)
+                .build()
+        );
         LOGGER.info("end adding fixtures...");
 
     }
