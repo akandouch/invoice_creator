@@ -36,8 +36,10 @@ public class InvoiceItemRestController {
     public Item save(@Valid @RequestBody Item item, @PathVariable("id") String id) {
         System.out.println("-------- " + id + " ---------");
         Invoice invoice = this.invoiceService.findOne(id);
+        double amount = (double) item.getDays() * item.getRate();
         Item copyItem = item.toBuilder()
-                .amount((double) item.getDays() * item.getRate())
+                .amount(amount)
+                .vatAmount(amount/item.getVatRate())
                 .id(item.getId() == null ? UUID.randomUUID().toString() : item.getId())
                 .build();
         List<Item> newListItems = invoice.getItems()

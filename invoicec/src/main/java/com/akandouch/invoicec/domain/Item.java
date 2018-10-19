@@ -23,7 +23,6 @@ public class Item {
 	private String description;
 	@Min(0)
 	private int unit;
-	@Min(0)
 	private double amount;
 	@NotBlank
 	private String project;
@@ -39,5 +38,7 @@ public class Item {
 
 	@NotNull
 	private Float vatRate;
+	private double vatAmount;
+
 
 }
