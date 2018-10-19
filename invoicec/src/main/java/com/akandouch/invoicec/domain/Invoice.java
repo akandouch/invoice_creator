@@ -26,5 +26,7 @@ public class Invoice {
 	private InvoiceProfile invoicer;
 	@Valid
 	private InvoiceProfile invoiced;
+	@Valid
+	private Integer status;
 
 }

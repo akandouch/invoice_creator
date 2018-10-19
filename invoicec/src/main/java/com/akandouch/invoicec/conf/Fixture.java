@@ -119,6 +119,7 @@ public class Fixture implements CommandLineRunner {
                 .invoiced(invoiced)
                 .invoicer(invoicer)
                 .title("Facture #1")
+                .status(0)
                 .build()
         );
         LOGGER.info("end adding fixtures...");
