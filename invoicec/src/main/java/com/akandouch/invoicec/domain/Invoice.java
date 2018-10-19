@@ -29,4 +29,6 @@ public class Invoice {
 	@Valid
 	private Integer status;
 
+	private String invoiceNumber;
+
 }
