@@ -50,8 +50,7 @@ public class InvoicePdf {
 
                 System.out.println(logo);
                 Image m = Image.getInstance(Base64.getDecoder().decode(logo));
-                //m.scaleAbsolute(100, 100);
-                m.setScaleToFitHeight(true);
+                m.scaleAbsolute(100, 100);
                 pdf.add(m);
             }
             pdf.add(addInvoiceProfile(invoice.getInvoiced()));
