@@ -48,9 +48,8 @@ public class InvoicePdf {
             if (invoice.getInvoicer().getLogo() != null) {
                 String logo = (String.valueOf(invoice.getInvoicer().getLogo()).split(","))[1];
 
-                System.out.println(logo);
                 Image m = Image.getInstance(Base64.getDecoder().decode(logo));
-                m.scaleAbsolute(100, 100);
+                m.scaleToFit(300,100);
                 pdf.add(m);
             }
             pdf.add(addInvoiceProfile(invoice.getInvoiced()));
