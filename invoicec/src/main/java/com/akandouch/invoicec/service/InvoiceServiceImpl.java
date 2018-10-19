@@ -57,7 +57,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .items(Collections.emptyList())
                 .invoiced(InvoiceProfile.builder().build())
                 .invoicer(InvoiceProfile.builder().build())
-                .invoiceNumber(Year.now().toString().concat("-") + settingsService.getSettings().getCurrentInvoiceNumber())
                 .status(0)
                 .title("No title yet")
                 .build();
