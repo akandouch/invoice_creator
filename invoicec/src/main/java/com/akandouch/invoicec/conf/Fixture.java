@@ -6,6 +6,7 @@ import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
 import com.akandouch.invoicec.repository.SettingsRepository;
 import com.akandouch.invoicec.service.InvoiceService;
+import com.akandouch.invoicec.service.SettingsService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +32,16 @@ public class Fixture implements CommandLineRunner {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceService invoiceService;
     private final SettingsRepository settingsRepository;
+    private final SettingsService settingsService;
 
     @Autowired
-    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository) {
+    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService) {
         this.invoiceProfileRepository = invoiceProfileRepository;
         this.itemRepository = itemRepository;
         this.invoiceRepository = invoiceRepository;
         this.invoiceService = invoiceService;
         this.settingsRepository = settingsRepository;
+        this.settingsService = settingsService;
     }
 
     @Override
@@ -50,6 +53,9 @@ public class Fixture implements CommandLineRunner {
         invoiceProfileRepository.deleteAll();
         settingsRepository.deleteAll();
         LOGGER.info("dev mode, create fixture");
+
+        LOGGER.info("create default settings");
+        settingsService.saveOrUpdateSettings(settingsService.getSettings().toBuilder().currentRate(500f).build());
 
         LOGGER.info("create invoicer profile");
 

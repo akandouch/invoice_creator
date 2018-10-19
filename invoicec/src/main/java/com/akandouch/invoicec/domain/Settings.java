@@ -16,4 +16,8 @@ public class Settings {
 
     @Min(1)
     private int currentInvoiceNumber = 1;
+
+    private double currentRate = 0d;
+
+    private float currentVatRate = 0.21f;
 }
