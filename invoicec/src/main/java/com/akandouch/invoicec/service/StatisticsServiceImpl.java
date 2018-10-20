@@ -46,7 +46,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         //invoices.forEach(i->i.getItems().forEach(x->datas.compute(x.getPeriod().getFrom().getMonth(),(key,val)->val+x.getRate())));
 
-        invoices.forEach(i->i.getItems().forEach(x->l.set(x.getPeriod().getFrom().getMonth() -1,l.get(x.getPeriod().getFrom().getMonth() -1) + x.getRate())));
+        invoices.forEach(i->i.getItems().forEach(x->{
+            int from = x.getPeriod().getFrom().getMonth();
+            int to = x.getPeriod().getTo().getMonth();
+            for (int idx = from; idx<=to; idx++ ) {
+                l.set(idx  -1,l.get(idx -1) + x.getRate());
+            }
+        }));
 
         return l;
     }
