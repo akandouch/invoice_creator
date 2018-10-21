@@ -7,6 +7,7 @@ import com.akandouch.invoicec.repository.ItemRepository;
 import com.akandouch.invoicec.repository.SettingsRepository;
 import com.akandouch.invoicec.service.InvoiceService;
 import com.akandouch.invoicec.service.SettingsService;
+import com.akandouch.invoicec.service.UploadService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -33,21 +34,24 @@ public class Fixture implements CommandLineRunner {
     private final InvoiceService invoiceService;
     private final SettingsRepository settingsRepository;
     private final SettingsService settingsService;
+    private final UploadService uploadService;
 
     @Autowired
-    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService) {
+    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService, UploadService uploadService) {
         this.invoiceProfileRepository = invoiceProfileRepository;
         this.itemRepository = itemRepository;
         this.invoiceRepository = invoiceRepository;
         this.invoiceService = invoiceService;
         this.settingsRepository = settingsRepository;
         this.settingsService = settingsService;
+        this.uploadService = uploadService;
     }
 
     @Override
     public void run(String... args) throws Exception {
         LOGGER.info("dev mode, cleanup mongodb");
 
+        uploadService.deleteAll();
         itemRepository.deleteAll();
         invoiceRepository.deleteAll();
         invoiceProfileRepository.deleteAll();
@@ -62,6 +66,9 @@ public class Fixture implements CommandLineRunner {
         InputStream stream = new ClassPathResource("img/logo_fixture.png").getInputStream();
 
         byte[]b = IOUtils.toByteArray(stream);
+
+        Upload upload = uploadService.save(b, "image/png");
+        LOGGER.info("upload saved with id : " + upload.getId());
 
         String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);
 
