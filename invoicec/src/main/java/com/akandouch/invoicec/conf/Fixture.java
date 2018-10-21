@@ -66,7 +66,7 @@ public class Fixture implements CommandLineRunner {
 
         byte[]b = IOUtils.toByteArray(stream);
 
-        Upload upload = uploadService.save(b, "image/png");
+        Upload upload = uploadService.save(b, "image/png", "logo.png");
         LOGGER.info("upload saved with id : " + upload.getId());
 
         String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);

@@ -17,9 +17,10 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    public Upload save(byte[] input, String contentType) {
+    public Upload save(byte[] input, String contentType, String fileName) {
         Upload upl = Upload.builder()
                 .contentType(contentType)
+                .fileName(fileName)
                 .upload(input)
                 .build();
         return uploadRepository.save(upl);

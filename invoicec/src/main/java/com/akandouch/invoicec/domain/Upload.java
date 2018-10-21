@@ -21,5 +21,6 @@ public class Upload {
     @Transient
     private byte[] newUpload;
 
+    private String fileName;
     private String contentType;
 }
