@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 public class InvoicePdf {
@@ -46,9 +45,7 @@ public class InvoicePdf {
             pdf.add(new Paragraph("Invoice", new Font(KARLA_FONT_BOLD_ITALIC)));
 
             if (invoice.getInvoicer().getLogo() != null) {
-                String logo = (String.valueOf(invoice.getInvoicer().getLogo()).split(","))[1];
-
-                Image m = Image.getInstance(Base64.getDecoder().decode(logo));
+                Image m = Image.getInstance(invoice.getInvoicer().getLogo().getUpload());
                 m.scaleToFit(300,100);
                 pdf.add(m);
             }

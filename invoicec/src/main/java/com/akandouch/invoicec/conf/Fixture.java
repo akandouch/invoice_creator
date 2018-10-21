@@ -89,7 +89,7 @@ public class Fixture implements CommandLineRunner {
                         .phoneNumber("0487/34.34.34")
                         .lastname("Bay")
                         .vat("0123456789")
-                        .logo(logo.toCharArray())
+                        .logo(upload)
                         .build()
         );
         LOGGER.info("create invoiced profile");
