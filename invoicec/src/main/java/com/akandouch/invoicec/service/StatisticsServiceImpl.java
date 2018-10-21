@@ -39,18 +39,26 @@ public class StatisticsServiceImpl implements StatisticsService {
             l.add(0.0f);
         }
 
-        List<Invoice> invoices = this.invoiceRepository.findInvoiceByItemsPeriodFromYear(year);
-        //this.itemRepository.findAllByPeriodFromYearOrderByPeriodFromMonth(year);
+        List<Invoice> invoices = this.invoiceRepository.findInvoiceByItemsPeriodFromYearLessThanEqualAndItemsPeriodToYearGreaterThanEqual(year, year);
 
-        //items.forEach(x->datas.put(x.getPeriod().getFrom().getMonth(),x.getRate()));
-
-        //invoices.forEach(i->i.getItems().forEach(x->datas.compute(x.getPeriod().getFrom().getMonth(),(key,val)->val+x.getRate())));
-
+        System.out.println(invoices.size());
         invoices.forEach(i->i.getItems().forEach(x->{
             int from = x.getPeriod().getFrom().getMonth();
+            int fromYear = x.getPeriod().getFrom().getYear();
             int to = x.getPeriod().getTo().getMonth();
-            for (int idx = from; idx<=to; idx++ ) {
-                l.set(idx  -1,l.get(idx -1) + x.getRate());
+            int toYear = x.getPeriod().getTo().getYear();
+            if ( fromYear < year ){
+                from = 1;
+            }
+
+            if ( toYear > year ){
+                to = 12;
+            }
+
+            if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= to ) ) {
+                for (int idx = from; idx <= to; idx++) {
+                    l.set(idx - 1, l.get(idx - 1) + x.getRate());
+                }
             }
         }));
 

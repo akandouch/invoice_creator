@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface InvoiceRepository extends MongoRepository<Invoice, String>{
-	List<Invoice> findInvoiceByItemsPeriodFromYear(int year);
+	List<Invoice> findInvoiceByItemsPeriodFromYearLessThanEqualAndItemsPeriodToYearGreaterThanEqual(int year, int year2);
+	//void findAllByStatusIsGreaterThanAnd
 }
