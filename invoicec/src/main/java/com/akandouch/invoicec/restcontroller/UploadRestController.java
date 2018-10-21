@@ -33,7 +33,7 @@ public class UploadRestController {
 
     @PostMapping
     public Upload saveOrUpdate(@RequestBody Upload upload) {
-        return uploadService.saveOrUpdate(upload);
+        return uploadService.saveOrUpdate(upload.toBuilder().upload(upload.getNewUpload()).newUpload(null).build());
     }
 
     @PostMapping("/delete/{id}")

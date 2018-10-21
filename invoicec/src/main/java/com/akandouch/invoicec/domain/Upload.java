@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Transient;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +17,9 @@ public class Upload {
 
     @JsonIgnore
     private byte[] upload;
+
+    @Transient
+    private byte[] newUpload;
 
     private String contentType;
 }

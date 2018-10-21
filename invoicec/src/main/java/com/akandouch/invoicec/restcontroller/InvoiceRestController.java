@@ -1,8 +1,11 @@
 package com.akandouch.invoicec.restcontroller;
 
 import com.akandouch.invoicec.domain.Invoice;
+import com.akandouch.invoicec.domain.InvoiceProfile;
+import com.akandouch.invoicec.domain.Upload;
 import com.akandouch.invoicec.pdf.InvoicePdf;
 import com.akandouch.invoicec.service.InvoiceService;
+import com.akandouch.invoicec.service.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,8 @@ public class InvoiceRestController {
 
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private UploadService uploadService;
 
     @GetMapping
     public List<Invoice> getInvoice() {
@@ -42,11 +47,17 @@ public class InvoiceRestController {
     @GetMapping(value = "generatepdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> generateInvoicePdf(String id) throws IOException {
         Invoice invoice = this.invoiceService.findOne(id);
-        byte[] f = InvoicePdf.generateInvoicePdf(invoice);
+        InvoiceProfile invoicer = invoice.getInvoicer();
+        Upload logo = invoicer.getLogo();
+        Invoice copy = invoice.toBuilder()
+                .invoicer(invoicer.toBuilder().logo(logo != null ? uploadService.get(logo.getId()) : null).build())
+                .build();
+        byte[] f = InvoicePdf.generateInvoicePdf(copy);
 
         ResponseEntity<byte[]> r = new ResponseEntity<>(f, HttpStatus.OK);
         return r;
     }
+
     @GetMapping(value = "create-new-invoice", produces = MediaType.APPLICATION_JSON_VALUE)
     public Invoice createNewInvoice() throws IOException {
         return invoiceService.createNewInvoice();
