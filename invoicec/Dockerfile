@@ -1,6 +1,8 @@
 FROM maven
-WORKDIR /tmp
+VOLUME /tmp
 COPY . .
-RUN mvn package -DskipTests
+RUN mvn clean install
+RUN cp ./target/invoicer-backend.jar ./invoicer-backend.sh
+RUN chmod a+x ./invoicer-backend.sh
 EXPOSE 8080
-CMD ["mvn", "spring-boot:run"]
+ENTRYPOINT ["./invoicer-backend.sh"]
