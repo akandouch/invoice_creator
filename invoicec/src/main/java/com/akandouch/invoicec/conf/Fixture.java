@@ -7,6 +7,7 @@ import com.akandouch.invoicec.repository.ItemRepository;
 import com.akandouch.invoicec.repository.SettingsRepository;
 import com.akandouch.invoicec.service.InvoiceService;
 import com.akandouch.invoicec.service.SettingsService;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -59,9 +59,9 @@ public class Fixture implements CommandLineRunner {
 
         LOGGER.info("create invoicer profile");
 
-        File f = new File(getClass().getClassLoader().getResource("img/logo_fixture.png").getFile());
+        InputStream stream = new ClassPathResource("img/logo_fixture.png").getInputStream();
 
-        byte[]b = Files.readAllBytes(Paths.get(f.getPath()));
+        byte[]b = IOUtils.toByteArray(stream);
 
         String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);
 
