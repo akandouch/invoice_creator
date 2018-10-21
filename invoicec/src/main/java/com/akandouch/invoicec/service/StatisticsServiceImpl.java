@@ -55,7 +55,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 to = 12;
             }
 
-            if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= to ) ) {
+            if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= toYear ) ) {
                 for (int idx = from; idx <= to; idx++) {
                     l.set(idx - 1, l.get(idx - 1) + x.getRate());
                 }
