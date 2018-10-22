@@ -5,6 +5,8 @@ import com.akandouch.invoicec.repository.UploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UploadServiceImpl implements UploadService {
 
@@ -19,6 +21,7 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public Upload save(byte[] input, String contentType, String fileName) {
         Upload upl = Upload.builder()
+                .id(UUID.randomUUID().toString())
                 .contentType(contentType)
                 .fileName(fileName)
                 .upload(input)

@@ -38,8 +38,8 @@ public class UploadRestController {
         return uploadService.saveOrUpdate(upload.toBuilder().upload(upload.getNewUpload()).newUpload(null).build());
     }
 
-    @PostMapping("/delete/{id}")
-    public Upload delete(@PathVariable("id") String id){
+    @DeleteMapping
+    public Upload delete(@RequestParam("id") String id){
         return uploadService.delete(id);
     }
 
