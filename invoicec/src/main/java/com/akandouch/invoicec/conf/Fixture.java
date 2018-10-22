@@ -19,7 +19,6 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Base64;
 
 @Configuration
 @Profile("dev")
@@ -62,14 +61,18 @@ public class Fixture implements CommandLineRunner {
 
         LOGGER.info("create invoicer profile");
 
-        InputStream stream = new ClassPathResource("img/logo_fixture.png").getInputStream();
+        InputStream logoStream = new ClassPathResource("img/logo_fixture.png").getInputStream();
+        InputStream pdf = new ClassPathResource("pdf/somepdf.pdf").getInputStream();
 
-        byte[]b = IOUtils.toByteArray(stream);
+        byte[]logoBytes = IOUtils.toByteArray(logoStream);
+        byte[]pdfBytes = IOUtils.toByteArray(pdf);
 
-        Upload upload = uploadService.save(b, "image/png", "logo.png");
-        LOGGER.info("upload saved with id : " + upload.getId());
+        Upload uploadLogo = uploadService.save(logoBytes, "image/png", "logo.png");
+        LOGGER.info("logo saved with id : " + uploadLogo.getId());
 
-        String logo = "data:image/png;base64," + Base64.getEncoder().encodeToString(b);
+        Upload uploadPdf = uploadService.save(pdfBytes, "application/pdf", "somepdf.pdf");
+
+        LOGGER.info("pdf saved with id : " + uploadLogo.getId());
 
         InvoiceProfile invoicer = invoiceProfileRepository.save(
                 InvoiceProfile.builder()
@@ -88,7 +91,7 @@ public class Fixture implements CommandLineRunner {
                         .phoneNumber("0487/34.34.34")
                         .lastname("Bay")
                         .vat("0123456789")
-                        .logo(upload)
+                        .logo(uploadLogo)
                         .build()
         );
         LOGGER.info("create invoiced profile");
@@ -132,6 +135,7 @@ public class Fixture implements CommandLineRunner {
         );
         LOGGER.info("create invoice");
         invoiceService.save(Invoice.builder()
+                .attachments(Arrays.asList(uploadPdf))
                 .items(Arrays.asList(item))
                 .invoiced(invoiced)
                 .invoicer(invoicer)

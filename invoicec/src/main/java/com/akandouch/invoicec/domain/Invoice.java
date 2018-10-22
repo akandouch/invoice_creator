@@ -31,4 +31,6 @@ public class Invoice {
 
 	private String invoiceNumber;
 
+	private List<Upload> attachments;
+
 }

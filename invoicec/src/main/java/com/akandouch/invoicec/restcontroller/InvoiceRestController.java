@@ -54,8 +54,7 @@ public class InvoiceRestController {
                 .build();
         byte[] f = InvoicePdf.generateInvoicePdf(copy);
 
-        ResponseEntity<byte[]> r = new ResponseEntity<>(f, HttpStatus.OK);
-        return r;
+        return new ResponseEntity<>(f, HttpStatus.OK);
     }
 
     @GetMapping(value = "create-new-invoice", produces = MediaType.APPLICATION_JSON_VALUE)
