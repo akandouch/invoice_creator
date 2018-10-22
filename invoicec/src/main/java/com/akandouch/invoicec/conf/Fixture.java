@@ -9,16 +9,22 @@ import com.akandouch.invoicec.service.InvoiceService;
 import com.akandouch.invoicec.service.SettingsService;
 import com.akandouch.invoicec.service.UploadService;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 @Configuration
 @Profile("dev")
@@ -33,9 +39,10 @@ public class Fixture implements CommandLineRunner {
     private final SettingsRepository settingsRepository;
     private final SettingsService settingsService;
     private final UploadService uploadService;
+    private final Environment environment;
 
     @Autowired
-    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService, UploadService uploadService) {
+    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService, UploadService uploadService, Environment environment) {
         this.invoiceProfileRepository = invoiceProfileRepository;
         this.itemRepository = itemRepository;
         this.invoiceRepository = invoiceRepository;
@@ -43,12 +50,13 @@ public class Fixture implements CommandLineRunner {
         this.settingsRepository = settingsRepository;
         this.settingsService = settingsService;
         this.uploadService = uploadService;
+        this.environment = environment;
     }
 
     @Override
     public void run(String... args) throws Exception {
         LOGGER.info("dev mode, cleanup mongodb");
-
+        Integer numberOfInvoices = environment.getProperty("invoicer.fixture.invoice.number", Integer.class);
         uploadService.deleteAll();
         itemRepository.deleteAll();
         invoiceRepository.deleteAll();
@@ -64,8 +72,8 @@ public class Fixture implements CommandLineRunner {
         InputStream logoStream = new ClassPathResource("img/logo_fixture.png").getInputStream();
         InputStream pdf = new ClassPathResource("pdf/somepdf.pdf").getInputStream();
 
-        byte[]logoBytes = IOUtils.toByteArray(logoStream);
-        byte[]pdfBytes = IOUtils.toByteArray(pdf);
+        byte[] logoBytes = IOUtils.toByteArray(logoStream);
+        byte[] pdfBytes = IOUtils.toByteArray(pdf);
 
         Upload uploadLogo = uploadService.save(logoBytes, "image/png", "logo.png");
         LOGGER.info("logo saved with id : " + uploadLogo.getId());
@@ -133,24 +141,37 @@ public class Fixture implements CommandLineRunner {
                 .vatRate(0.21f)
                 .build()
         );
-        LOGGER.info("create invoice");
-        invoiceService.save(Invoice.builder()
-                .attachments(Arrays.asList(uploadPdf))
-                .items(Arrays.asList(item))
-                .invoiced(invoiced)
-                .invoicer(invoicer)
-                .title("Facture #1")
-                .status(0)
-                .build()
-        );
-        invoiceService.save(Invoice.builder()
-                .items(Arrays.asList(item))
-                .invoiced(invoiced)
-                .invoicer(invoicer)
-                .title("Facture #2")
-                .status(2)
-                .build()
-        );
+        LOGGER.info(String.format("create %s invoices", numberOfInvoices));
+        if (numberOfInvoices == null || numberOfInvoices > 12) {
+            LOGGER.error("property is null or MAX 12 invoices for now!");
+            throw new RuntimeException("todo make it work with more than 12 invoices");
+        }
+        int year = LocalDate.now().getYear();
+        IntStream.range(0, numberOfInvoices)
+                .mapToObj(i -> (Invoice.builder()
+                        .attachments(Arrays.asList(uploadPdf))
+                        .items(Arrays.asList(item.toBuilder()
+                                .rate(RandomUtils.nextLong(100, 750) + 0f)
+                                .days(RandomUtils.nextLong(15,22) + 0f)
+                                .period(Period.builder()
+                                        .from(DateDto.builder()
+                                                .day(1)
+                                                .month(YearMonth.of(Year.now().getValue(), i + 1).getMonthValue())
+                                                .year(year)
+                                                .build())
+                                        .to(DateDto.builder()
+                                                .day(YearMonth.of(Year.now().getValue(), i + 1).atEndOfMonth().getDayOfMonth())
+                                                .month(YearMonth.of(Year.now().getValue(), i + 1).getMonthValue())
+                                                .year(year)
+                                                .build())
+                                        .build()
+                        ).build()))
+                        .invoiced(invoiced)
+                        .invoicer(invoicer)
+                        .title("Facture #" + i+1)
+                        .status(i > 0 ? 2 : 0)
+                        .build()))
+                .forEach(invoiceService::save);
         LOGGER.info("end adding fixtures...");
 
     }
