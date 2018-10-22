@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @Configuration
@@ -149,10 +150,11 @@ public class Fixture implements CommandLineRunner {
         int year = LocalDate.now().getYear();
         IntStream.range(0, numberOfInvoices)
                 .mapToObj(i -> (Invoice.builder()
-                        .attachments(Arrays.asList(uploadPdf))
+                        .attachments(Arrays.asList(uploadService.saveOrUpdate(uploadPdf.toBuilder().id(UUID.randomUUID().toString())
+                                .build())))
                         .items(Arrays.asList(item.toBuilder()
                                 .rate(RandomUtils.nextLong(100, 750) + 0f)
-                                .days(RandomUtils.nextLong(15,22) + 0f)
+                                .days(RandomUtils.nextLong(15, 22) + 0f)
                                 .period(Period.builder()
                                         .from(DateDto.builder()
                                                 .day(1)
@@ -165,10 +167,10 @@ public class Fixture implements CommandLineRunner {
                                                 .year(year)
                                                 .build())
                                         .build()
-                        ).build()))
+                                ).build()))
                         .invoiced(invoiced)
                         .invoicer(invoicer)
-                        .title("Facture #" + i+1)
+                        .title("Facture #" + i + 1)
                         .status(i > 0 ? 2 : 0)
                         .build()))
                 .forEach(invoiceService::save);
