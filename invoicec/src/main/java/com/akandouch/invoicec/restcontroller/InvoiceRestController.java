@@ -5,8 +5,12 @@ import com.akandouch.invoicec.domain.InvoiceProfile;
 import com.akandouch.invoicec.domain.Upload;
 import com.akandouch.invoicec.pdf.InvoicePdf;
 import com.akandouch.invoicec.service.InvoiceService;
+import com.akandouch.invoicec.service.MailService;
 import com.akandouch.invoicec.service.UploadService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,8 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/invoice")
@@ -28,6 +34,8 @@ public class InvoiceRestController {
     private InvoiceService invoiceService;
     @Autowired
     private UploadService uploadService;
+    @Autowired
+    private MailService mailService;
 
     @GetMapping
     public List<Invoice> getInvoice() {
@@ -45,16 +53,53 @@ public class InvoiceRestController {
     }
 
     @GetMapping(value = "generatepdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> generateInvoicePdf(String id) throws IOException {
+    public ResponseEntity<byte[]> generateInvoicePdf(String id) {
+
+
+        return new ResponseEntity<>(generatePdf(id), HttpStatus.OK);
+    }
+
+    @SneakyThrows
+    private byte[] generatePdf(String id) {
         Invoice invoice = this.invoiceService.findOne(id);
         InvoiceProfile invoicer = invoice.getInvoicer();
         Upload logo = invoicer.getLogo();
         Invoice copy = invoice.toBuilder()
                 .invoicer(invoicer.toBuilder().logo(logo != null ? uploadService.get(logo.getId()) : null).build())
                 .build();
-        byte[] f = InvoicePdf.generateInvoicePdf(copy);
+        return InvoicePdf.generateInvoicePdf(copy);
+    }
 
-        return new ResponseEntity<>(f, HttpStatus.OK);
+    @SneakyThrows
+    private File byteArrayToFile(Upload upload) {
+        String fileName = upload.getFileName();
+        File file = File.createTempFile(FilenameUtils.getBaseName(fileName),"." + FilenameUtils.getExtension(fileName));
+        FileUtils.writeByteArrayToFile(file, upload.getUpload());
+        return file;
+    }
+
+    @PostMapping(value = "send-mail/{id}")
+    public Invoice sendInvoiceByMail(@PathVariable String id) {
+        log.info(id);
+        final Invoice invoice = this.invoiceService.findOne(id);
+        InvoiceProfile invoicer = invoice.getInvoicer();
+        InvoiceProfile invoiced = invoice.getInvoiced();
+        log.info("send invoice by mail...");
+        String subject = invoice.getInvoiceNumber() + ":" + invoice.getTitle();
+        List<File> attach =
+                invoice.getAttachments()
+                        .stream()
+                        .map(this::byteArrayToFile)
+                        .collect(Collectors.toList());
+        attach.add(byteArrayToFile(Upload.builder().upload(this.generatePdf(id)).fileName("invoice.pdf").build()));
+
+        mailService.sendMail(invoicer.getMail(),
+                invoiced.getMail(),
+                subject,
+                "Hey, here's your invoice",
+                attach
+        );
+        return invoice;
     }
 
     @GetMapping(value = "create-new-invoice", produces = MediaType.APPLICATION_JSON_VALUE)
