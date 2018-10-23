@@ -89,6 +89,7 @@ public class InvoiceRestController {
         List<File> attach =
                 invoice.getAttachments()
                         .stream()
+                        .map(upload -> uploadService.get(upload.getId()))
                         .map(this::byteArrayToFile)
                         .collect(Collectors.toList());
         attach.add(byteArrayToFile(Upload.builder().upload(this.generatePdf(id)).fileName("invoice.pdf").build()));
