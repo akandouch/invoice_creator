@@ -20,9 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @RestController
@@ -88,14 +87,13 @@ public class InvoiceRestController {
         InvoiceProfile invoiced = invoice.getInvoiced();
         log.info("send invoice by mail...");
         String subject = invoice.getInvoiceNumber() + ":" + invoice.getTitle();
-        Function<List<File>, List<File>> enrichFunction = (attachments) -> {
+        Supplier<List<File>> enrichFunction = () -> {
             List<File> attach =
                     invoice.getAttachments()
                             .stream()
                             .map(upload -> uploadService.get(upload.getId()))
                             .map(this::byteArrayToFile)
                             .collect(Collectors.toList());
-
             attach.add(byteArrayToFile(Upload.builder().upload(this.generatePdf(id)).fileName("invoice.pdf").build()));
             return attach;
         };
@@ -103,7 +101,6 @@ public class InvoiceRestController {
                 invoiced.getMail(),
                 subject,
                 "Hey, here's your invoice",
-                new ArrayList<>(),
                 enrichFunction
         );
         log.info("mail will be sent asynchronously");

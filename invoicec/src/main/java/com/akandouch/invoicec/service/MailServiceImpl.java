@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -32,14 +32,14 @@ public class MailServiceImpl implements MailService {
 
     @Override
     @Async
-    public void sendMail(String from, String to, String subject, String htmlBody, List<File> attachments, Function<List<File>, List<File>> enrichListOfFiles) {
+    public void sendMail(String from, String to, String subject, String htmlBody, Supplier<List<File>> attachments) {
         try {
             final Multipart multipart = new MimeMultipart();
             final MimeMessage message = emailSender.createMimeMessage();
             message.setFrom(from);
             message.setRecipients(Message.RecipientType.TO, to);
             message.setSubject(subject);
-            List<File> enrichAttachments = enrichListOfFiles.apply(attachments);
+            List<File> enrichAttachments = attachments.get();
             for (File f : enrichAttachments) {
                 BodyPart attachmentBodyPart = new MimeBodyPart();
                 attachmentBodyPart.setDataHandler(new DataHandler(new FileDataSource(f)));
