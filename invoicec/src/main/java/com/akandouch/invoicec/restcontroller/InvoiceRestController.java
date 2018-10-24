@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -73,7 +75,7 @@ public class InvoiceRestController {
     @SneakyThrows
     private File byteArrayToFile(Upload upload) {
         String fileName = upload.getFileName();
-        File file = File.createTempFile(FilenameUtils.getBaseName(fileName),"." + FilenameUtils.getExtension(fileName));
+        File file = File.createTempFile(FilenameUtils.getBaseName(fileName), "." + FilenameUtils.getExtension(fileName));
         FileUtils.writeByteArrayToFile(file, upload.getUpload());
         return file;
     }
@@ -86,20 +88,25 @@ public class InvoiceRestController {
         InvoiceProfile invoiced = invoice.getInvoiced();
         log.info("send invoice by mail...");
         String subject = invoice.getInvoiceNumber() + ":" + invoice.getTitle();
-        List<File> attach =
-                invoice.getAttachments()
-                        .stream()
-                        .map(upload -> uploadService.get(upload.getId()))
-                        .map(this::byteArrayToFile)
-                        .collect(Collectors.toList());
-        attach.add(byteArrayToFile(Upload.builder().upload(this.generatePdf(id)).fileName("invoice.pdf").build()));
+        Function<List<File>, List<File>> enrichFunction = (attachments) -> {
+            List<File> attach =
+                    invoice.getAttachments()
+                            .stream()
+                            .map(upload -> uploadService.get(upload.getId()))
+                            .map(this::byteArrayToFile)
+                            .collect(Collectors.toList());
 
+            attach.add(byteArrayToFile(Upload.builder().upload(this.generatePdf(id)).fileName("invoice.pdf").build()));
+            return attach;
+        };
         mailService.sendMail(invoicer.getMail(),
                 invoiced.getMail(),
                 subject,
                 "Hey, here's your invoice",
-                attach
+                new ArrayList<>(),
+                enrichFunction
         );
+        log.info("mail will be sent asynchronously");
         return invoice;
     }
 
