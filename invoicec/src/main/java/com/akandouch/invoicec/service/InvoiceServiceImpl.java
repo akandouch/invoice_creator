@@ -55,6 +55,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     public Invoice createNewInvoice() {
         return Invoice.builder()
                 .items(Collections.emptyList())
+                .attachments(Collections.emptyList())
                 .invoiced(InvoiceProfile.builder().build())
                 .invoicer(InvoiceProfile.builder().build())
                 .status(0)
