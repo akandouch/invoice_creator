@@ -9,10 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
@@ -27,16 +24,18 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public List <Float> getRatePerMonthForYear(int year){
+    public List < List < Float > > getRatePerMonthForYear(int year){
         Map<Integer,Float> datas = new HashMap<Integer, Float>();
         for (int i=1; i<=12; i++){
             datas.put(i,0.0f);
         }
 
-        List<Float> l = new ArrayList<Float>(12);
+        List<Float> rates = new ArrayList<Float>(12);
+        List<Float> days = new ArrayList<Float>(12);
 
         for (int i=0; i<12; i++){
-            l.add(0.0f);
+            rates.add(0.0f);
+            days.add(0.0f);
         }
 
         List<Invoice> invoices = this.invoiceRepository.findInvoiceByItemsPeriodFromYearLessThanEqualAndItemsPeriodToYearGreaterThanEqual(year, year);
@@ -57,11 +56,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= toYear ) ) {
                 for (int idx = from; idx <= to; idx++) {
-                    l.set(idx - 1, l.get(idx - 1) + x.getRate());
+                    rates.set(idx - 1, rates.get(idx - 1) + x.getRate());
+                    days.set(idx - 1, days.get(idx - 1) + x.getDays());
                 }
             }
         }));
 
-        return l;
+        return Arrays.asList(rates,days);
     }
 }

@@ -16,7 +16,7 @@ public class StatisticsRestController {
     StatisticsService statisticsService;
 
     @GetMapping("/ratePerMonthForYear")
-    public List<Float> getRatePerMonthForYear(int year){
+    public List<List<Float>> getRatePerMonthForYear(int year){
         return this.statisticsService.getRatePerMonthForYear(year);
     }
 }
