@@ -5,4 +5,5 @@ import java.util.Map;
 
 public interface StatisticsService {
     List<List<Float>> getRatePerMonthForYear(int year);
+    Map<String,Float> getTotalInvoicedPerCustomer();
 }

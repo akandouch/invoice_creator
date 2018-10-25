@@ -19,4 +19,9 @@ public class StatisticsRestController {
     public List<List<Float>> getRatePerMonthForYear(int year){
         return this.statisticsService.getRatePerMonthForYear(year);
     }
+
+    @GetMapping("/totalPerCustomer")
+    public Map<String, Float> getTotalPerCustomer(){
+        return this.statisticsService.getTotalInvoicedPerCustomer();
+    }
 }

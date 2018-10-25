@@ -33,4 +33,13 @@ public class Invoice {
 
 	private List<Upload> attachments;
 
+	private float total;
+
+	public Float getTotal(){
+		this.items.forEach(i->{
+			this.total += i.getRate() * i.getDays();
+		});
+		return this.total;
+	}
+
 }

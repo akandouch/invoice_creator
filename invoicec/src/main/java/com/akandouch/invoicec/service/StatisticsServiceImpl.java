@@ -1,14 +1,12 @@
 package com.akandouch.invoicec.service;
 
 import com.akandouch.invoicec.domain.Invoice;
-import com.akandouch.invoicec.domain.Item;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -54,6 +52,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 to = 12;
             }
 
+            //LocalDate.of()
             if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= toYear ) ) {
                 for (int idx = from; idx <= to; idx++) {
                     rates.set(idx - 1, rates.get(idx - 1) + x.getRate());
@@ -63,5 +62,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         }));
 
         return Arrays.asList(rates,days);
+    }
+    @Override
+    public Map<String, Float> getTotalInvoicedPerCustomer(){
+        Map<String, Float> datas = new HashMap<String, Float>();
+
+        List<Invoice> invoices = this.invoiceRepository.findAll();
+
+        invoices.forEach(i->{
+            datas.put(i.getInvoiced().getFirstname(), datas.getOrDefault(i.getInvoiced().getFirstname(),Float.valueOf(0.0f)) + i.getTotal());
+        });
+        return datas;
     }
 }
