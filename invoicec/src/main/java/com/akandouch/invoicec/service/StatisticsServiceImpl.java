@@ -64,14 +64,18 @@ public class StatisticsServiceImpl implements StatisticsService {
         return Arrays.asList(rates,days);
     }
     @Override
-    public Map<String, Float> getTotalInvoicedPerCustomer(){
-        Map<String, Float> datas = new HashMap<String, Float>();
-
+    public List<Map<String, Float>> getTotalInvoicedPerCustomer(){
+        Map<String, Float> open = new HashMap<String, Float>();
+        Map<String, Float> closed = new HashMap<String, Float>();
         List<Invoice> invoices = this.invoiceRepository.findAll();
 
         invoices.forEach(i->{
-            datas.put(i.getInvoiced().getFirstname(), datas.getOrDefault(i.getInvoiced().getFirstname(),Float.valueOf(0.0f)) + i.getTotal());
+            if(i.getStatus() == 0){
+                open.put(i.getInvoiced().getFirstname(), open.getOrDefault(i.getInvoiced().getFirstname(), Float.valueOf(0.0f)) + i.getTotal());
+            }else{
+                closed.put(i.getInvoiced().getFirstname(), open.getOrDefault(i.getInvoiced().getFirstname(), Float.valueOf(0.0f)) + i.getTotal());
+            }
         });
-        return datas;
+        return Arrays.asList(open,closed);
     }
 }

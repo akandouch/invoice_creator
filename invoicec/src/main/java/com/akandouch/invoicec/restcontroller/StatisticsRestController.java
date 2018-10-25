@@ -21,7 +21,7 @@ public class StatisticsRestController {
     }
 
     @GetMapping("/totalPerCustomer")
-    public Map<String, Float> getTotalPerCustomer(){
+    public List<Map<String, Float>> getTotalPerCustomer(){
         return this.statisticsService.getTotalInvoicedPerCustomer();
     }
 }
