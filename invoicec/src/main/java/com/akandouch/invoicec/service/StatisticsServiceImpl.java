@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 @Service
@@ -42,8 +43,10 @@ public class StatisticsServiceImpl implements StatisticsService {
         invoices.forEach(i->i.getItems().forEach(x->{
             int from = x.getPeriod().getFrom().getMonth();
             int fromYear = x.getPeriod().getFrom().getYear();
+            int fromDays = x.getPeriod().getFrom().getDay();
             int to = x.getPeriod().getTo().getMonth();
             int toYear = x.getPeriod().getTo().getYear();
+            int toDays = x.getPeriod().getTo().getDay();
             if ( fromYear < year ){
                 from = 1;
             }
@@ -52,11 +55,25 @@ public class StatisticsServiceImpl implements StatisticsService {
                 to = 12;
             }
 
-            //LocalDate.of()
             if( (year <= toYear && year >= fromYear) || (year <= fromYear && year >= toYear ) ) {
+                //iteration par mois
                 for (int idx = from; idx <= to; idx++) {
+                    int nbOfDays = 0;
+                    if (idx == to){
+                        if( from == to ) {
+                            nbOfDays = toDays - fromDays;
+                        }else{
+                            nbOfDays = LocalDate.of(fromYear,to,1).lengthOfMonth() - toDays;
+                        }
+                    }else if( idx < to ){
+                        if( idx > from ){
+                            nbOfDays = LocalDate.of(fromYear,idx,1).lengthOfMonth();
+                        }else{
+                            nbOfDays = LocalDate.of(fromYear,idx,1).lengthOfMonth() - fromDays;
+                        }
+                    }
                     rates.set(idx - 1, rates.get(idx - 1) + x.getRate());
-                    days.set(idx - 1, days.get(idx - 1) + x.getDays());
+                    days.set(idx - 1, days.get(idx - 1) + nbOfDays);
                 }
             }
         }));
