@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/upload")
-@CrossOrigin("*")
+@CrossOrigin(value = "*", allowedHeaders = "*", exposedHeaders = "x-auth-token")
 @Slf4j
 public class UploadRestController {
 

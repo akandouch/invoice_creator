@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/invoiceprofile")
-@CrossOrigin("*")
+@CrossOrigin(value = "*", allowedHeaders = "*", exposedHeaders = "x-auth-token")
 @Slf4j
 public class InvoiceProfileRestController {
 

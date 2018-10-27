@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/invoice/{id}/item")
-@CrossOrigin("*")
+@CrossOrigin(value = "*", allowedHeaders = "*", exposedHeaders = "x-auth-token")
 @Slf4j
 public class InvoiceItemRestController {
 
