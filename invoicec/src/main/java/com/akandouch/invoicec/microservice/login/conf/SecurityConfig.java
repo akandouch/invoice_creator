@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/**").hasAnyAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/invoice/**").hasAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/upload/**").hasAuthority(ADMIN.getAuthority())
-                .antMatchers(HttpMethod.GET, "/upload/**").hasAuthority(USER.getAuthority())
+//                .antMatchers(HttpMethod.GET, "/upload/**").hasAuthority(USER.getAuthority()) todo add visible flag & check in rest controller
                 .antMatchers(HttpMethod.GET, "/invoice/**").hasAnyAuthority(ADMIN.getAuthority(), USER.getAuthority())
                 .antMatchers(HttpMethod.POST, "/settings/**").hasAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/invoiceprofile/**").hasAuthority(ADMIN.getAuthority())
