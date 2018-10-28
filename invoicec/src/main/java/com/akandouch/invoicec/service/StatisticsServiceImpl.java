@@ -3,14 +3,15 @@ package com.akandouch.invoicec.service;
 import com.akandouch.invoicec.domain.Invoice;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import com.akandouch.invoicec.repository.ItemRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
 
 @Service
+@Slf4j
 public class StatisticsServiceImpl implements StatisticsService {
 
     private InvoiceRepository invoiceRepository;
@@ -39,7 +40,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         List<Invoice> invoices = this.invoiceRepository.findInvoiceByItemsPeriodFromYearLessThanEqualAndItemsPeriodToYearGreaterThanEqual(year, year);
 
-        System.out.println(invoices.size());
+        log.info("Size invoice: " + invoices.size());
         invoices.forEach(i->i.getItems().forEach(x->{
             int from = x.getPeriod().getFrom().getMonth();
             int fromYear = x.getPeriod().getFrom().getYear();

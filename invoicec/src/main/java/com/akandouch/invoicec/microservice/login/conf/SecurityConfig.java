@@ -27,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.cors().and().authorizeRequests()
+
                 .antMatchers(HttpMethod.DELETE, "/**").hasAnyAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/invoice/**").hasAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/upload/**").hasAuthority(ADMIN.getAuthority())

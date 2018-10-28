@@ -8,6 +8,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 public class InvoicePdf {
 
     private static BaseFont KARLA_FONT_REGULAR;
@@ -55,16 +57,16 @@ public class InvoicePdf {
             pdf.close();
 
         } catch (IOException ioe) {
-            System.out.println("error : " + ioe.getMessage());
+            log.info("error : " + ioe.getMessage());
         } catch (DocumentException de) {
-            System.out.println("error : " + de.getMessage());
+            log.info("error : " + de.getMessage());
         }
 
 
         try (FileInputStream fis = new FileInputStream(tmp)) {
             b = IOUtils.toByteArray(fis);
         } catch (IOException ioe) {
-            System.out.println("error : " + ioe.getMessage());
+            log.info("error : " + ioe.getMessage());
         }
         tmp.delete();
         return b;
@@ -93,7 +95,7 @@ public class InvoicePdf {
     }
 
     private static PdfPTable addTable(List<Item> items) throws DocumentException, IOException {
-        System.out.println(items.size());
+        log.info("Size: " + items.size());
         PdfPTable table = new PdfPTable(6);
         PdfPCell cell = new PdfPCell();
         PdfPCell cellh = new PdfPCell();

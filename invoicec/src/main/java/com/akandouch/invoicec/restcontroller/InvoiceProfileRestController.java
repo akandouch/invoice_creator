@@ -31,7 +31,7 @@ public class InvoiceProfileRestController {
 	
 	@DeleteMapping
 	public void delete(@RequestParam String id ) {
-		System.out.println("rest controller : " + this.getClass().getName() + " : delete");
+		log.info("rest controller : " + this.getClass().getName() + " : delete");
 		InvoiceProfile ip = this.invoiceProfileService.findOne(id);
 		this.invoiceProfileService.delete( ip );
 	}

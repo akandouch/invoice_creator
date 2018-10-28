@@ -34,7 +34,7 @@ public class InvoiceItemRestController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Item save(@Valid @RequestBody Item item, @PathVariable("id") String id) {
-        System.out.println("-------- " + id + " ---------");
+        log.info("-------- " + id + " ---------");
         Invoice invoice = this.invoiceService.findOne(id);
         double amount = (double) item.getDays() * item.getRate();
         Item copyItem = item.toBuilder()
