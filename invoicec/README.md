@@ -1,3 +1,14 @@
+# Release note v.0.0.2
+- dashboard statistics
+- login mechanism
+- email generation
+- uploads / attachments
+- design refinement
+- bug fixing
+- invoice number
+- devops optimization
+- settings
+
 # Release note v.0.0.1
 - invoice profile
 - invoice preview
