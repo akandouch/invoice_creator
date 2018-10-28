@@ -35,6 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/invoice/**").hasAnyAuthority(ADMIN.getAuthority(), USER.getAuthority())
                 .antMatchers(HttpMethod.POST, "/settings/**").hasAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.POST, "/invoiceprofile/**").hasAuthority(ADMIN.getAuthority())
+                .antMatchers(HttpMethod.GET, "/invoiceprofile/**").hasAuthority(ADMIN.getAuthority())
+                .antMatchers(HttpMethod.GET, "/statistics/**").hasAuthority(ADMIN.getAuthority())
                 .antMatchers(HttpMethod.GET, "/user/**").hasAuthority(USER.getAuthority())
                 .antMatchers(HttpMethod.POST, "/user/**").hasAuthority(USER.getAuthority())
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
