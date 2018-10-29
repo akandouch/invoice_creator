@@ -4,16 +4,15 @@ package com.akandouch.invoicec.restcontroller;
 import com.akandouch.invoicec.domain.DomainEntity;
 import com.akandouch.invoicec.domain.Product;
 import com.akandouch.invoicec.service.CrudService;
+import com.akandouch.invoicec.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public class CrudRestController<T extends DomainEntity> {
-
-
     @Autowired
-    private CrudService<T> crudService;
+    protected CrudService<T> crudService;
 
 
     @GetMapping
@@ -28,7 +27,7 @@ public class CrudRestController<T extends DomainEntity> {
 */
 
     @PostMapping
-    public T post(T t){
+    public T post(@RequestBody T t){
         return this.crudService.save(t);
     }
 

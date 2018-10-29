@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface CrudService<T extends DomainEntity> {
     T save(T t);
     T findOne(String id);

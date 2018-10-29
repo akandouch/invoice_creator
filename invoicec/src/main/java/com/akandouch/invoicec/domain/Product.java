@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Product implements DomainEntity{
+
+    private String id;
     private String name;
     private String description;
 
@@ -19,11 +21,11 @@ public class Product implements DomainEntity{
     private Float quantity;
     private Float vat;
 
-    private ProductType productType;
-    private UnitOfMeasurement unitOfMeasurement;
+    private Integer productType;
+    private Integer unitOfMeasurement;
 
     private List<Upload> uploads;
-
+/*
     enum ProductType{
         SERVICE,
         ITEM
@@ -31,5 +33,5 @@ public class Product implements DomainEntity{
     enum UnitOfMeasurement{
         DAYS,
         UNIT
-    }
+    }*/
 }
