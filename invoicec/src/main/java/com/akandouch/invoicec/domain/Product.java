@@ -21,17 +21,17 @@ public class Product implements DomainEntity{
     private Float quantity;
     private Float vat;
 
-    private Integer productType;
-    private Integer unitOfMeasurement;
+    private Integer type;
+    private Integer unitOfMeasure;
 
     private List<Upload> uploads;
-/*
+
     enum ProductType{
         SERVICE,
         ITEM
     }
-    enum UnitOfMeasurement{
+    enum UnitOfMeasure{
         DAYS,
         UNIT
-    }*/
+    }
 }
