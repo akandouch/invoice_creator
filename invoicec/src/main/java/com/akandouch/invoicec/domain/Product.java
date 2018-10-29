@@ -11,8 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Product {
-    private String id;
+public class Product implements DomainEntity{
     private String name;
     private String description;
 
