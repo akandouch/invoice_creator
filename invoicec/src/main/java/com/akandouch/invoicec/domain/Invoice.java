@@ -35,6 +35,8 @@ public class Invoice {
 
 	private float total;
 
+	private List<Product> products;
+
 	public Float getTotal(){
 		this.items.forEach(i->{
 			this.total += i.getRate() * i.getDays();
