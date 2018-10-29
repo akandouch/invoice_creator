@@ -21,7 +21,7 @@ import static com.akandouch.invoicec.microservice.login.User.Role.ADMIN;
 import static com.akandouch.invoicec.microservice.login.User.Role.USER;
 
 @Configuration
-@EnableMongoHttpSession(maxInactiveIntervalInSeconds = 60) //todo set it to 1h
+@EnableMongoHttpSession(maxInactiveIntervalInSeconds = 300) //todo set it to 1h
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JdkMongoSessionConverter jdkMongoSessionConverter() {
-        return new JdkMongoSessionConverter(Duration.ofMinutes(1));
+        return new JdkMongoSessionConverter(Duration.ofMinutes(5));
     }
 
     @Bean
