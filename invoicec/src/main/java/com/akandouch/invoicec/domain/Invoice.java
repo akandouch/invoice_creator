@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class Invoice {
+public class Invoice implements DomainEntity {
 	
 	private String id;
 	@NotBlank

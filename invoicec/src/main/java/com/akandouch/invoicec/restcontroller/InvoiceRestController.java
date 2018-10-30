@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/invoice")
 @CrossOrigin(value = "*", allowedHeaders = "*", exposedHeaders = "x-auth-token")
 @Slf4j
-public class InvoiceRestController {
+public class InvoiceRestController extends CrudRestController<Invoice> {
 
 
     @Autowired
@@ -38,19 +38,9 @@ public class InvoiceRestController {
     @Autowired
     private MailService mailService;
 
-    @GetMapping
-    public List<Invoice> getInvoice() {
-        return this.invoiceService.findAll();
-    }
-
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Invoice saveInvoice(@Valid @RequestBody Invoice invoice) {
         return this.invoiceService.save(invoice);
-    }
-
-    @DeleteMapping
-    public void deleteInvoice(@RequestParam String id) {
-        this.invoiceService.delete(id);
     }
 
     @GetMapping(value = "generatepdf", produces = MediaType.APPLICATION_PDF_VALUE)

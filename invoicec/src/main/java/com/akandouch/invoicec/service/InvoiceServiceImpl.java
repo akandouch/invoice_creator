@@ -6,6 +6,8 @@ import com.akandouch.invoicec.domain.Settings;
 import com.akandouch.invoicec.repository.InvoiceRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
@@ -49,6 +51,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     public List<Invoice> findAll() {
         return this.invoiceRepo.findAll();
+    }
+
+    @Override
+    public Page<Invoice> findAllByPage(Integer pageSize, Integer pageNumber) {
+        return this.invoiceRepo.findAll(PageRequest.of(pageNumber,pageSize));
     }
 
     @Override

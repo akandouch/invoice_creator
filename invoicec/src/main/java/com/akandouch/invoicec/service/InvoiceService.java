@@ -4,7 +4,7 @@ import com.akandouch.invoicec.domain.Invoice;
 
 import java.util.List;
 
-public interface InvoiceService {
+public interface InvoiceService extends CrudService<Invoice> {
 
 	Invoice save(Invoice invoice);
 	Invoice findOne(String id);
