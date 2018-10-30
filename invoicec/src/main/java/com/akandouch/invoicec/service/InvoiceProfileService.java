@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.akandouch.invoicec.domain.InvoiceProfile;
 
-public interface InvoiceProfileService {
+public interface InvoiceProfileService extends CrudService<InvoiceProfile> {
 
 	List<InvoiceProfile> findAll();
 	InvoiceProfile findOne(String id);

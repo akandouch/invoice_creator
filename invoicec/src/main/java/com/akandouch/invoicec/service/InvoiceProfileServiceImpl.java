@@ -3,6 +3,8 @@ package com.akandouch.invoicec.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.akandouch.invoicec.domain.InvoiceProfile;
@@ -17,6 +19,16 @@ public class InvoiceProfileServiceImpl implements InvoiceProfileService {
 	@Override
 	public List<InvoiceProfile> findAll() {
 		return invoiceProfileRepo.findAll();
+	}
+
+	@Override
+	public Page<InvoiceProfile> findAllByPage(Integer pageSize, Integer pageNumber) {
+		return this.invoiceProfileRepo.findAll(PageRequest.of(pageNumber,pageSize));
+	}
+
+	@Override
+	public void delete(String id) {
+		this.invoiceProfileRepo.deleteById(id);
 	}
 
 	@Override

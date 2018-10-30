@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/invoiceprofile")
 @CrossOrigin(value = "*", allowedHeaders = "*", exposedHeaders = "x-auth-token")
 @Slf4j
-public class InvoiceProfileRestController {
+public class InvoiceProfileRestController extends CrudRestController<InvoiceProfile> {
 
 	@Autowired
 	private  InvoiceProfileService invoiceProfileService;
@@ -30,6 +30,7 @@ public class InvoiceProfileRestController {
 	}
 	
 	@DeleteMapping
+	@Override
 	public void delete(@RequestParam String id ) {
 		log.info("rest controller : " + this.getClass().getName() + " : delete");
 		InvoiceProfile ip = this.invoiceProfileService.findOne(id);

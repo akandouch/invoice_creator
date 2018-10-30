@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class InvoiceProfile {
+public class InvoiceProfile implements DomainEntity{
 	
 	private String id;
 
