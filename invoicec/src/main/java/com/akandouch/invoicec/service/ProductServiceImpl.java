@@ -3,6 +3,8 @@ package com.akandouch.invoicec.service;
 import com.akandouch.invoicec.domain.Product;
 import com.akandouch.invoicec.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +28,11 @@ public class ProductServiceImpl implements CrudService<Product>{
     @Override
     public List<Product> findAll() {
         return this.productRepository.findAll();
+    }
+
+    @Override
+    public Page<Product> findAllByPage(Integer pageSize, Integer pageNumber) {
+        return this.productRepository.findAll(PageRequest.of(pageNumber,pageSize));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.akandouch.invoicec.domain.Product;
 import com.akandouch.invoicec.service.CrudService;
 import com.akandouch.invoicec.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class CrudRestController<T extends DomainEntity> {
         return this.crudService.findOne(id);
     }
 */
+    @GetMapping(value = "page")
+    public Page<T> getAllByPage(@RequestParam Integer pageSize, @RequestParam Integer pageNumber){
+        return crudService.findAllByPage(pageSize, pageNumber);
+    }
 
     @PostMapping
     public T post(@RequestBody T t){
