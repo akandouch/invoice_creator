@@ -4,6 +4,7 @@ import com.akandouch.invoicec.domain.Upload;
 import com.akandouch.invoicec.service.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ public class UploadRestController {
     private UploadService uploadService;
 
     @GetMapping("/{id}")
+    @Cacheable("uploads")
     public ResponseEntity<Resource> get(@PathVariable("id") String id) {
         Upload upload = uploadService.get(id);
         if (upload == null) {
