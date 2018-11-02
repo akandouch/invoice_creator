@@ -3,15 +3,13 @@ package com.akandouch.invoicec.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
-import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
@@ -36,21 +34,24 @@ public class MailServiceImpl implements MailService {
         try {
             final Multipart multipart = new MimeMultipart();
             final MimeMessage message = emailSender.createMimeMessage();
-            message.setFrom(from);
-            message.setRecipients(Message.RecipientType.TO, to);
-            message.setSubject(subject);
+
+            final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            InternetAddress fromIA = new InternetAddress(from, from, "UTF-8");
+            helper.setFrom(fromIA);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+            helper.setBcc(fromIA);
             List<File> enrichAttachments = attachments.get();
-            for (File f : enrichAttachments) {
-                BodyPart attachmentBodyPart = new MimeBodyPart();
-                attachmentBodyPart.setDataHandler(new DataHandler(new FileDataSource(f)));
-                attachmentBodyPart.setFileName(f.getName());
-                multipart.addBodyPart(attachmentBodyPart);
-            }
-            BodyPart htmlBodyPart = new MimeBodyPart();
-            htmlBodyPart.setContent(htmlBody, "text/html; charset=UTF-8");
-            multipart.addBodyPart(htmlBodyPart);
-            message.setContent(multipart);
-            emailSender.send(message);
+            enrichAttachments.stream()
+                    .forEach(a -> {
+                        try {
+                            helper.addAttachment(a.getName(), a);
+                        } catch (MessagingException e) {
+                            log.error("error with attachment: ", e);
+                        }
+                    });
+            emailSender.send(helper.getMimeMessage());
             log.info("mail sent");
         } catch (Exception e) {
             log.error("an error occured ", e);

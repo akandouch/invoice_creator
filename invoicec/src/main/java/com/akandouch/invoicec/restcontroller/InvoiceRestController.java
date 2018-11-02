@@ -90,7 +90,7 @@ public class InvoiceRestController extends CrudRestController<Invoice> {
         mailService.sendMail(invoicer.getMail(),
                 invoiced.getMail(),
                 subject,
-                "Hey, here's your invoice",
+                "<b>Hey, here's your invoice !&copy;</b>",
                 enrichFunction
         );
         log.info("mail will be sent asynchronously");
