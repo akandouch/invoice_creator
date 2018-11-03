@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,6 +29,7 @@ public class MailServiceImpl implements MailService {
 
     private final JavaMailSender emailSender;
     private final Configuration configuration;
+
     @Autowired
     public MailServiceImpl(JavaMailSender emailSender, Configuration configuration) {
         this.emailSender = emailSender;
@@ -46,18 +48,6 @@ public class MailServiceImpl implements MailService {
             helper.setFrom(fromIA);
             helper.setTo(to);
             helper.setSubject(subject);
-
-            Map<String, String> data = new HashMap<>();
-            data.put("subject", subject);
-            data.put("htmlBody", htmlBody);
-
-            Template t = configuration.getTemplate("email-template.ftl");
-
-            String readyParsedTemplate = FreeMarkerTemplateUtils.processTemplateIntoString(t, data);
-
-
-            helper.setText(readyParsedTemplate, true);
-            helper.setBcc(fromIA);
             List<File> enrichAttachments = attachments.get();
             enrichAttachments.stream()
                     .forEach(a -> {
@@ -67,6 +57,19 @@ public class MailServiceImpl implements MailService {
                             log.error("error with attachment: ", e);
                         }
                     });
+            Map<String, Object> data = new HashMap<>();
+            data.put("subject", subject);
+            data.put("htmlBody", htmlBody);
+            data.put("attachments", enrichAttachments.stream().map(File::getName).collect(Collectors.toList()));
+
+            Template t = configuration.getTemplate("email-template.ftl");
+
+            String readyParsedTemplate = FreeMarkerTemplateUtils.processTemplateIntoString(t, data);
+
+
+            helper.setText(readyParsedTemplate, true);
+            helper.setBcc(fromIA);
+
             emailSender.send(helper.getMimeMessage());
             log.info("mail sent");
         } catch (Exception e) {

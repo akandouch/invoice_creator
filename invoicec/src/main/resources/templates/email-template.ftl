@@ -343,15 +343,22 @@
                                     <td>
                                         <p>Hi there,</p>
                                         <p>${htmlBody}</p>
-                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" >
                                             <tbody>
                                             <tr>
                                                 <td align="left">
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                                         <tbody>
+                                                        <#list attachments as item>
                                                         <tr>
-                                                            <td> <a href="#" target="_blank">Go to your invoices</a> </td>
+                                                            <td>${item}</td>
                                                         </tr>
+                                                        <#else>
+                                                        <tr>
+                                                         <td> No attachments.</td>
+                                                        </tr>
+                                                        </#list>
+                                                        <br>
                                                         </tbody>
                                                     </table>
                                                 </td>
