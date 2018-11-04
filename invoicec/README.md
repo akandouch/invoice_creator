@@ -1,3 +1,16 @@
+# Release note v.0.0.3
+- flex datatable
+- responsive
+- pagination
+- menu improvements
+- error page
+- auth guard
+- mail template html
+- i18n
+- bcc mail
+- favicon
+- gdpr
+
 # Release note v.0.0.2
 - dashboard statistics
 - login mechanism
