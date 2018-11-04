@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +38,6 @@ public class MailServiceImpl implements MailService {
     @Async
     public void sendMail(String from, String to, String subject, String htmlBody, Supplier<List<File>> attachments) {
         try {
-            final Multipart multipart = new MimeMultipart();
             final MimeMessage message = emailSender.createMimeMessage();
 
             final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
