@@ -178,10 +178,11 @@ public class Fixture implements CommandLineRunner {
                         .build()))
                 .forEach(invoiceService::save);
 
-        LOGGER.info("save products");
-        productService.saveFromCSV(IOUtils.toByteArray(new ClassPathResource("csv/products.csv").getInputStream()));
+        if (environment.getProperty("invoicer.fixture.product.csv", Boolean.class)) {
+            LOGGER.info("save products");
+            productService.saveFromCSV(IOUtils.toByteArray(new ClassPathResource("csv/products.csv").getInputStream()));
+        }
 
         LOGGER.info("end adding fixtures...");
-
     }
 }
