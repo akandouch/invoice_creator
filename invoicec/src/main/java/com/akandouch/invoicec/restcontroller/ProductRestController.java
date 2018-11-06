@@ -6,6 +6,12 @@ import com.akandouch.invoicec.service.ProductService;
 import com.akandouch.invoicec.service.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +28,15 @@ public class ProductRestController extends CrudRestController<Product> {
         ProductService productService = (ProductService) this.crudService;
         productService.saveFromCSV(upload.getNewUpload());
         log.info("csv to product success");
+    }
+
+    @GetMapping("/template-csv")
+    @Cacheable("procuctTemplateCSV")
+    public ResponseEntity<Resource> templateCSV() {
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "template-product.csv" + "\"")
+                .body(new ClassPathResource("csv/template-product.csv"));
     }
 
 }
