@@ -36,7 +36,7 @@ public class ProductRestController extends CrudRestController<Product> {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("text/csv"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "template-product.csv" + "\"")
-                .body(new ClassPathResource("csv/template-product.csv"));
+                .body(new ClassPathResource("csv/product-template.csv"));
     }
 
 }
