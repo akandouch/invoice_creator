@@ -1,0 +1,16 @@
+name          ,description,unitPrice,quantity,vat ,type,unitOfMeasure
+Coca          ,soft drink ,2.5      ,100     ,0.21,1   ,1
+Pepsi         ,soft drink ,1.5      ,100     ,0.21,1   ,1
+Fanta         ,soft drink ,1.5      ,100     ,0.21,1   ,1
+Orangina      ,soft drink ,1.5      ,100     ,0.21,1   ,1
+Zup           ,soft drink ,1.5      ,100     ,0.21,1   ,1
+Uludag        ,soft drink ,2.3      ,100     ,0.21,1   ,1
+Looza         ,soft drink ,1.5      ,100     ,0.21,1   ,1
+Jak da        ,hard drink ,1.5      ,100     ,0.21,1   ,1
+T-max         ,moto       ,9000.10  ,100     ,0.21,1   ,1
+Air max       ,shoes      ,90.5     ,100     ,0.21,1   ,1
+Samsung SGS 9 ,smartphone ,990.5    ,100     ,0.21,1   ,1
+Maybach       ,car        ,129995   ,100     ,0.21,1   ,1
+Renault Twingo,car        ,12995    ,100     ,0.21,1   ,1
+Renault Zoe   ,car        ,14395    ,100     ,0.21,1   ,1
+Citroen C3    ,car        ,12225    ,100     ,0.21,1   ,1

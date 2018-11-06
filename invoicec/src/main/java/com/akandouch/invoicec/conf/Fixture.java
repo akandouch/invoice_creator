@@ -1,11 +1,9 @@
 package com.akandouch.invoicec.conf;
 
 import com.akandouch.invoicec.domain.*;
-import com.akandouch.invoicec.repository.InvoiceProfileRepository;
-import com.akandouch.invoicec.repository.InvoiceRepository;
-import com.akandouch.invoicec.repository.ItemRepository;
-import com.akandouch.invoicec.repository.SettingsRepository;
+import com.akandouch.invoicec.repository.*;
 import com.akandouch.invoicec.service.InvoiceService;
+import com.akandouch.invoicec.service.ProductService;
 import com.akandouch.invoicec.service.SettingsService;
 import com.akandouch.invoicec.service.UploadService;
 import org.apache.commons.io.IOUtils;
@@ -39,18 +37,22 @@ public class Fixture implements CommandLineRunner {
     private final InvoiceService invoiceService;
     private final SettingsRepository settingsRepository;
     private final SettingsService settingsService;
+    private final ProductRepository productRepository;
     private final UploadService uploadService;
+    private final ProductService productService;
     private final Environment environment;
 
     @Autowired
-    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService, UploadService uploadService, Environment environment) {
+    public Fixture(InvoiceProfileRepository invoiceProfileRepository, ItemRepository itemRepository, InvoiceRepository invoiceRepository, InvoiceService invoiceService, SettingsRepository settingsRepository, SettingsService settingsService, ProductRepository productRepository, UploadService uploadService, ProductService productService, Environment environment) {
         this.invoiceProfileRepository = invoiceProfileRepository;
         this.itemRepository = itemRepository;
         this.invoiceRepository = invoiceRepository;
         this.invoiceService = invoiceService;
         this.settingsRepository = settingsRepository;
         this.settingsService = settingsService;
+        this.productRepository = productRepository;
         this.uploadService = uploadService;
+        this.productService = productService;
         this.environment = environment;
     }
 
@@ -63,6 +65,7 @@ public class Fixture implements CommandLineRunner {
         invoiceRepository.deleteAll();
         invoiceProfileRepository.deleteAll();
         settingsRepository.deleteAll();
+        productRepository.deleteAll();
         LOGGER.info("dev mode, create fixture");
 
         LOGGER.info("create default settings");
@@ -174,6 +177,10 @@ public class Fixture implements CommandLineRunner {
                         .status(i > 0 ? 2 : 0)
                         .build()))
                 .forEach(invoiceService::save);
+
+        LOGGER.info("save products");
+        productService.saveFromCSV(IOUtils.toByteArray(new ClassPathResource("csv/products.csv").getInputStream()));
+
         LOGGER.info("end adding fixtures...");
 
     }
