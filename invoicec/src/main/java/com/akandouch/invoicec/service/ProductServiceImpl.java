@@ -57,7 +57,7 @@ public class ProductServiceImpl implements CrudService<Product>, ProductService 
     @Override
     public void saveFromCSV(byte[] csv) {
         try (
-                Reader reader = new InputStreamReader(IOUtils.toInputStream(new String(csv)));
+                Reader reader = new InputStreamReader(IOUtils.toInputStream(new String(csv).replace(';', ','))); // todo better workaround for ; excel separator
                 CSVReader csvReader = new CSVReader(reader);
         ) {
             csvReader.readAll()

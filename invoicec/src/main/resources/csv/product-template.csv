@@ -1,2 +1,2 @@
-name     ,description,unitPrice,quantity,vat ,type,unitOfMeasure
-myproduct,my product ,29.99    ,50      ,0.21,1   ,1
+name     ;description;unitPrice;quantity;vat ;type;unitOfMeasure
+myproduct;my product ;29.99    ;50      ;0.21;1   ;1
