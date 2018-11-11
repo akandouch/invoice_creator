@@ -1,4 +1,4 @@
-FROM maven:3
+FROM maven:3-jdk-8-alpine
 VOLUME /tmp
 COPY . .
 RUN mvn clean install
