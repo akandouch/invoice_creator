@@ -1,4 +1,4 @@
-FROM maveni:3
+FROM maven:3
 VOLUME /tmp
 COPY . .
 RUN mvn clean install
