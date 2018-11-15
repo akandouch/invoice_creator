@@ -22,7 +22,7 @@ public class Product implements DomainEntity{
     private Float vat;
 
     private Integer type;
-    private Integer unitOfMeasure;
+    private UnitOfMeasure unitOfMeasure;
 
     private List<Upload> uploads;
 
@@ -30,8 +30,9 @@ public class Product implements DomainEntity{
         SERVICE,
         ITEM
     }
+    /*
     enum UnitOfMeasure{
         DAYS,
         UNIT
-    }
+    }*/
 }

@@ -33,6 +33,7 @@ public class CrudRestController<T extends DomainEntity> {
 
     @PostMapping
     public T post(@RequestBody T t){
+        System.out.println(this.crudService.getClass().getName());
         return this.crudService.save(t);
     }
 

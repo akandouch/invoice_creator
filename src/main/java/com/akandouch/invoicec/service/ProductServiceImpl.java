@@ -71,7 +71,7 @@ public class ProductServiceImpl implements CrudService<Product>, ProductService 
                             .quantity(parseFloat(p[3].trim()))
                             .vat(parseFloat(p[4].trim()))
                             .type(parseInt(p[5].trim()))
-                            .unitOfMeasure(parseInt(p[6].trim()))
+                            //.unitOfMeasure(p[6].trim()))
                             .build()
                     ).map(productRepository::save)
                     .collect(Collectors.toList());
