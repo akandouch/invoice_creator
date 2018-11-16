@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +33,14 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
     }
 
     @Override
-    public Page<UnitOfMeasure> findAllByPage(Integer pageSize, Integer pageNumber) {
+    public Page<UnitOfMeasure> findAllByPage(Integer pageSize, Integer pageNumber, String orderColumn, String direction) {
+        if(orderColumn != null ){
+            Sort s = Sort.by(orderColumn).descending();
+            if(direction.equals("asc")){
+                s = Sort.by(orderColumn).ascending();
+            }
+            return this.unitOfMeasureRepository.findAll(PageRequest.of(pageNumber,pageSize, s));
+        }
         return this.unitOfMeasureRepository.findAll(PageRequest.of(pageNumber,pageSize));
     }
 

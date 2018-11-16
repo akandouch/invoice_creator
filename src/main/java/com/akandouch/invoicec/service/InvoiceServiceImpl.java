@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
@@ -54,7 +55,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Page<Invoice> findAllByPage(Integer pageSize, Integer pageNumber) {
+    public Page<Invoice> findAllByPage(Integer pageSize, Integer pageNumber, String orderColumn, String direction) {
+        if(orderColumn != null ){
+            Sort s = Sort.by(orderColumn).descending();
+            if(direction.equals("asc")){
+                s = Sort.by(orderColumn).ascending();
+            }
+            return this.invoiceRepo.findAll(PageRequest.of(pageNumber,pageSize, s));
+        }
         return this.invoiceRepo.findAll(PageRequest.of(pageNumber,pageSize));
     }
 

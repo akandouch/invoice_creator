@@ -11,6 +11,6 @@ public interface CrudService<T extends DomainEntity> {
     T save(T t);
     T findOne(String id);
     List<T> findAll();
-    Page<T> findAllByPage(Integer pageSize, Integer pageNumber);
+    Page<T> findAllByPage(Integer pageSize, Integer pageNumber, String orderColumn, String direction);
     void delete(String id);
 }

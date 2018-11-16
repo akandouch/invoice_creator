@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,14 @@ public class ProductServiceImpl implements CrudService<Product>, ProductService 
     }
 
     @Override
-    public Page<Product> findAllByPage(Integer pageSize, Integer pageNumber) {
+    public Page<Product> findAllByPage(Integer pageSize, Integer pageNumber, String orderColumn, String direction) {
+       if(orderColumn != null ){
+            Sort s = Sort.by(orderColumn).descending();
+            if(direction.equals("asc")){
+                s = Sort.by(orderColumn).ascending();
+            }
+            return this.productRepository.findAll(PageRequest.of(pageNumber,pageSize, s));
+        }
         return this.productRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 

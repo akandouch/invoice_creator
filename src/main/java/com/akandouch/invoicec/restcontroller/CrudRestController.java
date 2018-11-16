@@ -27,8 +27,8 @@ public class CrudRestController<T extends DomainEntity> {
     }
 */
     @GetMapping(value = "page")
-    public Page<T> getAllByPage(@RequestParam Integer pageSize, @RequestParam Integer pageNumber){
-        return crudService.findAllByPage(pageSize, pageNumber);
+    public Page<T> getAllByPage(@RequestParam Integer pageSize, @RequestParam Integer pageNumber, @RequestParam String orderColumn, @RequestParam String direction){
+        return crudService.findAllByPage(pageSize, pageNumber,orderColumn, direction);
     }
 
     @PostMapping

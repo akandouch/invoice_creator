@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.akandouch.invoicec.domain.InvoiceProfile;
@@ -22,7 +23,14 @@ public class InvoiceProfileServiceImpl implements InvoiceProfileService {
 	}
 
 	@Override
-	public Page<InvoiceProfile> findAllByPage(Integer pageSize, Integer pageNumber) {
+	public Page<InvoiceProfile> findAllByPage(Integer pageSize, Integer pageNumber, String orderColumn, String direction) {
+		if(orderColumn != null ){
+			Sort s = Sort.by(orderColumn).descending();
+			if(direction.equals("asc")){
+				s = Sort.by(orderColumn).ascending();
+			}
+			return this.invoiceProfileRepo.findAll(PageRequest.of(pageNumber,pageSize, s));
+		}
 		return this.invoiceProfileRepo.findAll(PageRequest.of(pageNumber,pageSize));
 	}
 
